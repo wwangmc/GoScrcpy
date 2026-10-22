@@ -1,0 +1,10 @@
+/.cache/
+/bin/
+/build/bin/
+*.log
+
+*.syso
+/frontend/node_modules/
+/.codex/
+.env
+.env.*
