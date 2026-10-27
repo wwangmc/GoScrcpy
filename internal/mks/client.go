@@ -103,8 +103,29 @@ type statusError struct {
 func (e *statusError) Error() string { return e.message }
 
 func (a *API) JSON(ctx context.Context, path string, body any) (string, error) {
-	ctx, cancel := context.WithTimeout(ctx, 4*time.Second)
+	return a.JSONWithTimeout(ctx, path, body, 4*time.Second)
+}
+
+// JSONWithTimeout allows a bounded on-device curl query to outlive the control timeout.
+func (a *API) JSONWithTimeout(ctx context.Context, path string, body any, timeout time.Duration) (string, error) {
+	ctx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
+	if timeout > 4*time.Second {
+		// Shell requests send headers after completion; keep video/control deadlines unchanged.
+		transport := a.transport.Clone()
+		transport.ResponseHeaderTimeout = timeout
+		dial := a.dialUSB
+		transport.DialContext = func(ctx context.Context, _, _ string) (net.Conn, error) {
+			conn, err := dial(ctx)
+			if err == nil {
+				_ = conn.SetDeadline(time.Now().Add(timeout))
+			}
+			return conn, err
+		}
+		long := &API{client: &http.Client{Transport: transport, CheckRedirect: func(*http.Request, []*http.Request) error { return http.ErrUseLastResponse }}, transport: transport}
+		defer long.Close()
+		a = long
+	}
 	r, err := a.request(ctx, path, body)
 	if err != nil {
 		return "", err
@@ -158,7 +179,7 @@ func Scan(ctx context.Context, mux *usbmux.Client) ([]device.Device, error) {
 				return
 			}
 			defer func() { <-limit }()
-			item := device.Device{Serial: d.Properties.Serial, State: "unavailable", Model: "iPhone", Transport: "USB", Platform: "ios", Codec: "jpeg", Controls: supportedControls(), Settings: []string{"maxFPS"}}
+			item := device.Device{Serial: d.Properties.Serial, State: "unavailable", Model: "iPhone", Transport: "USB", Platform: "ios", Codec: "jpeg", VideoModes: []string{"jpeg"}, Controls: supportedControls(), Settings: []string{"maxFPS"}}
 			api := NewAPI(mux, d)
 			defer api.Close()
 			probe, cancel := context.WithTimeout(ctx, 1800*time.Millisecond)
@@ -174,6 +195,11 @@ func Scan(ctx context.Context, mux *usbmux.Client) ([]device.Device, error) {
 					item.Model = parts[0]
 					item.Product = parts[3]
 					item.State = "device"
+					if hasPhoneVideo(probe, mux, d) {
+						item.VideoModes = []string{"jpeg", "h264"}
+						item.Codec = "h264"
+						item.Settings = []string{"maxFPS", "maxSize", "bitRate"}
+					}
 				}
 			}
 			result[i] = item

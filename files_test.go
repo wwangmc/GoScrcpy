@@ -17,10 +17,21 @@ func TestFileWindowSerialIsolation(t *testing.T) {
 		if _, _, _, err := a.fileBackend("different-phone", ""); err == nil {
 			t.Fatal("file window accepted a different device")
 		}
+		if err := a.DeleteFile("different-phone", "media", "/Documents/file"); err == nil {
+			t.Fatal("deletion accepted a different device")
+		}
+		if err := a.PasteFile("different-phone", "media", "media", "/Documents/file", "/Target", "move"); err == nil {
+			t.Fatal("paste accepted a different device")
+		}
 	}
 	a := &App{}
 	if _, err := a.fileRequest("RenameFile", []string{"device"}); err == nil {
 		t.Fatal("malformed file request accepted")
+	}
+	for _, method := range []string{"DeleteFile", "PasteFile"} {
+		if _, err := a.fileRequest(method, []string{"device"}); err == nil {
+			t.Fatalf("malformed %s accepted", method)
+		}
 	}
 }
 
@@ -171,6 +182,12 @@ func TestFileOperationsAreSerialized(t *testing.T) {
 	}
 	if _, err := a.BrowseFiles("device", "", ""); err == nil {
 		t.Fatal("browsing during transfer accepted")
+	}
+	if err := a.DeleteFile("device", "media", "/file"); err == nil {
+		t.Fatal("deletion during transfer accepted")
+	}
+	if err := a.PasteFile("device", "media", "media", "/file", "/Target", "copy"); err == nil {
+		t.Fatal("paste during transfer accepted")
 	}
 	a.files.ops.Unlock()
 	if err := a.lockFiles(); err != nil {

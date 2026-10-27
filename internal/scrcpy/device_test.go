@@ -26,7 +26,7 @@ func TestDeviceMirror(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	s, err := Start(context.Background(), client, server, serial, Options{1920, 60, 8000000})
+	s, err := Start(context.Background(), client, server, serial, Options{MaxSize: 1920, MaxFPS: 60, BitRate: 8000000})
 	if err != nil {
 		t.Fatal(err)
 	}

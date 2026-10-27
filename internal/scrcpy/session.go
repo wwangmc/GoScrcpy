@@ -17,12 +17,16 @@ import (
 )
 
 type Options struct {
-	MaxSize int `json:"maxSize"`
-	MaxFPS  int `json:"maxFPS"`
-	BitRate int `json:"bitRate"`
+	MaxSize   int    `json:"maxSize"`
+	MaxFPS    int    `json:"maxFPS"`
+	BitRate   int    `json:"bitRate"`
+	VideoMode string `json:"videoMode,omitempty"` // Empty/auto preserves automatic selection.
 }
 
 func (o Options) Validate() error {
+	if o.VideoMode != "" && o.VideoMode != "auto" && o.VideoMode != "jpeg" && o.VideoMode != "h264" {
+		return fmt.Errorf("无效投屏方式")
+	}
 	if o.MaxSize < 256 || o.MaxSize > 4096 || o.MaxFPS < 1 || o.MaxFPS > 120 || o.BitRate < 500000 || o.BitRate > 50000000 {
 		return fmt.Errorf("投屏参数超出范围（尺寸 256–4096，帧率 1–120，码率 0.5–50 Mbps）")
 	}

@@ -18,13 +18,18 @@ import (
 	"phonescreen/internal/scrcpy"
 )
 
-//go:embed frontend/index.html frontend/style.css frontend/app.js frontend/files.js frontend/drop.js frontend/protocol.js frontend/app-icon.png
+//go:embed frontend/index.html frontend/style.css frontend/app.js frontend/files.js frontend/drop.js frontend/proxy.js frontend/shell.js frontend/ios-settings.js frontend/tools.js frontend/yolo.js frontend/protocol.js frontend/app-icon.png
 var frontend embed.FS
 
 //go:embed assets/scrcpy-server-v3.3.4
 var server []byte
 
+//go:embed assets/android/curl
+var androidCurl []byte
+
 func main() {
+	shellSerial := flag.String("shell", "", "在独立命令行窗口连接指定手机")
+	shellPlatform := flag.String("shell-platform", "", "命令行设备平台：android 或 ios")
 	fileSerial := flag.String("files", "", "在独立窗口管理指定手机的文件")
 	web := flag.Bool("web", false, "使用本机浏览器界面（诊断用途）")
 	smokeSerial := flag.String("smoke-test", "", "在指定设备上执行 Wails 原生投屏自检，完成后退出")
@@ -32,7 +37,14 @@ func main() {
 	maxSize := flag.Int("max-size", 1920, "最大分辨率")
 	maxFPS := flag.Int("max-fps", 60, "最大帧率")
 	bitRate := flag.Int("bit-rate", 8000000, "视频码率")
+	videoMode := flag.String("video-mode", "auto", "投屏方式：auto、jpeg、h264")
 	flag.Parse()
+	if *shellSerial != "" {
+		if err := runNativeShell(*shellSerial, *shellPlatform); err != nil {
+			log.Print(err)
+		}
+		return
+	}
 	app, err := NewApp(server)
 	if err != nil {
 		log.Fatal(err)
@@ -51,7 +63,7 @@ func main() {
 	app.smokeSerial = *smokeSerial
 	app.mirrorSerial = *mirrorSerial
 	app.fileSerial = *fileSerial
-	app.launchSettings = scrcpy.Options{MaxSize: *maxSize, MaxFPS: *maxFPS, BitRate: *bitRate}
+	app.launchSettings = scrcpy.Options{MaxSize: *maxSize, MaxFPS: *maxFPS, BitRate: *bitRate, VideoMode: *videoMode}
 	files, _ := fs.Sub(frontend, "frontend")
 	if *web {
 		app.enableWeb(files)

@@ -149,6 +149,34 @@ func (m *Manager) withClient(ctx context.Context, serial, scope string, fn func(
 }
 
 func CleanPath(p string) string { return path.Clean("/" + strings.TrimLeft(p, "/")) }
+
+// Deletion requires an exact absolute entry path. Never normalize an ambiguous
+// path into a different deletion target, or allow deletion of a scope root.
+func DeletePath(p string) (string, error) {
+	if p == "/" || !strings.HasPrefix(p, "/") || strings.ContainsAny(p, "\\\x00") || p != CleanPath(p) {
+		return "", errors.New("删除路径无效，不能删除根目录")
+	}
+	return p, nil
+}
+
+func (m *Manager) Delete(ctx context.Context, serial, scope, remote string) error {
+	remote, err := DeletePath(remote)
+	if err != nil {
+		return err
+	}
+	return m.withClient(ctx, serial, scope, func(c *afc.Client, _ io.ReadWriter) error {
+		info, err := c.Stat(remote)
+		if err != nil {
+			return err
+		}
+		if info.IsDir() {
+			return c.RemoveAll(remote)
+		}
+		// A symlink is removed itself; its target must never be traversed.
+		return c.Remove(remote)
+	})
+}
+
 func Child(parent, name string) (string, error) {
 	if name == "" || name == "." || name == ".." || strings.ContainsAny(name, "/\\\x00") || strings.ContainsRune(parent, 0) {
 		return "", errors.New("名称不能为空，也不能包含路径分隔符")

@@ -65,3 +65,23 @@
 .device-menu button{display:block;width:100%;padding:10px 14px;text-align:left;border:0;border-radius:4px;background:transparent;color:#d4e3f3;font-size:12px}
 .device-menu button:hover:enabled,.device-menu button:focus-visible{background:#2c473f;color:#a5eccb;outline:none}
 #refresh{transition:none}
+.files-table tr.files-cut td{opacity:.5}#files-menu small{float:right;margin-left:20px;color:#829db6}#files-clipboard{color:#87bda6;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:50%}
+.device-menu button.files-danger{color:#f19c9c}.device-menu button.files-danger:hover:enabled,.device-menu button.files-danger:focus-visible{background:#59353c;color:#ffd0d0}
+#files-delete-dialog{width:min(420px,calc(100vw - 24px))}#files-delete-warning{font-size:13px;line-height:1.8;color:#e8bb9f}#files-delete-path{font-size:12px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere;color:#d2e2ef;max-height:160px;overflow:auto}#files-delete-error{font-size:12px;line-height:1.8;color:#f19c9c;overflow-wrap:anywhere}#files-delete-submit{background:#8b3542;border:1px solid #b45461;color:#fff;padding:9px 16px;border-radius:6px}
+#ios-settings-search{display:block;width:100%;padding:10px;margin-top:8px}#ios-settings-search-status{margin-top:7px}
+#ios-settings-dialog{width:min(370px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow:auto}#ios-settings-dialog select{padding:10px}.ios-settings-preview{display:grid;grid-template-columns:auto minmax(0,1fr);gap:13px 16px;margin:22px 0;font-size:12px;line-height:1.7}.ios-settings-preview dt{color:#829db6}.ios-settings-preview dd{margin:0;color:#d2e2ef;overflow-wrap:anywhere}#ios-settings-apply{width:100%}#ios-settings-status{font-size:12px;line-height:1.8;overflow-wrap:anywhere;margin-top:15px;color:#9ab9ac}#ios-settings-status.error{color:#e8b39c}
+#openssh-dialog{width:min(360px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow:auto}#openssh-dialog p{margin-top:14px;font-size:12px;line-height:1.8;overflow-wrap:anywhere;color:#a4bad0}.openssh-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:20px}.openssh-actions button{flex:1;white-space:nowrap}#openssh-status{color:#e8b39c!important}
+.video-mode-label{display:flex;align-items:center;justify-content:space-between;gap:6px}
+#video-mode-current{font-size:10px;font-weight:400;color:var(--green)}
+#video-mode-hint{margin:6px 0 12px;line-height:1.6}
+#video-mode:disabled{opacity:.65;cursor:not-allowed}
+#ios-curl-dialog{width:min(360px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow:auto}#ios-curl-dialog p{margin-top:14px;font-size:12px;line-height:1.8;overflow-wrap:anywhere;color:#a4bad0}.ios-curl-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:20px}.ios-curl-actions button{flex:1;white-space:nowrap}#ios-curl-status{color:#e8b39c!important}
+#proxy-dialog{width:min(390px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow:auto;padding:22px;border:1px solid #3c556b;border-radius:12px;background:#142130;color:#d5e4f2}
+#proxy-dialog label{display:block;font-size:12px;color:#a9bed0;margin:15px 0 7px}#proxy-dialog input,#proxy-dialog select{width:100%;padding:10px;min-width:0}#proxy-dialog .tiny{line-height:1.8;margin-top:7px;overflow-wrap:anywhere}
+.proxy-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:20px 0 12px;font-size:12px}.proxy-app-row{display:flex;gap:7px}.proxy-app-row input{flex:1}.proxy-app-row button{flex-shrink:0;font-size:11px;padding:8px}
+#proxy-change{width:100%;margin-top:15px;padding:11px}#proxy-status{font-size:12px;line-height:1.8;margin-top:14px;white-space:pre-wrap;overflow-wrap:anywhere}#proxy-status.error{color:#e8b39c}#proxy-ip{margin-top:14px;padding:14px;border:1px solid #34544d;border-radius:8px;background:#19352e}#proxy-ip-address{font:22px Consolas,monospace;color:#a5e8c7}#proxy-ip-location{font-size:12px;margin-top:8px}
+
+/* Detection canvas shares the video content rectangle and never intercepts input. */
+#yolo-overlay{position:absolute;inset:0;width:100%;height:100%;max-width:none;max-height:none;object-fit:contain;pointer-events:none;z-index:2}
+#yolo-status{position:absolute;left:10px;top:10px;z-index:3;max-width:calc(100% - 80px);padding:6px 9px;border:1px solid #42edb055;border-radius:6px;background:#10251de0;color:#8affd2;font:11px/1.6 system-ui;pointer-events:none;overflow-wrap:anywhere}
+#yolo-status.error{color:#f2c39c;border-color:#c5895555}

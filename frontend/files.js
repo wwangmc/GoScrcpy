@@ -20,9 +20,28 @@ export async function initializeFileManager(serial,fileDrop){
     const state={serial,platform:'',scope:'',path:'',entries:[],selected:'',busy:false,loading:false,sort:'name',descending:false,apps:[],dialog:null,progress:null,cancelling:false};
   const working=()=>state.busy||state.loading;
   const chosen=()=>state.entries.find(e=>e.path===state.selected);
+  const deleteDialog=$('files-delete-dialog'),menu=$('files-menu');
+  let deleteTarget=null,deleteAttempted=false,clipboard=null;
+  const modalOpen=()=>$('files-name-dialog').open||deleteDialog.open;
+  function closeMenu(){menu.hidden=true;}
+  function openMenu(event,item=null){
+    event.preventDefault();closeMenu();if(working()||modalOpen())return;
+    state.selected=item?.path||'';update();
+    $('files-menu-download').disabled=item?.kind!=='file'||!!item?.error;
+    for(const id of ['files-menu-copy','files-menu-cut','files-menu-rename','files-menu-delete'])$(id).disabled=!item;
+    $('files-menu-paste').disabled=!clipboard||clipboard.scope!==state.scope||!state.path;
+    menu.hidden=false;
+    menu.style.left=`${Math.max(0,Math.min(event.clientX,window.innerWidth-menu.offsetWidth-8))}px`;
+    menu.style.top=`${Math.max(0,Math.min(event.clientY,window.innerHeight-menu.offsetHeight-8))}px`;
+    (item?$('files-menu-copy'):$('files-menu-paste')).focus();
+  }
   const error=(value='')=>{$('files-error').textContent=value;$('files-error').hidden=!value;};
   function update(){
-    const item=chosen(),disabled=working(),ready=!!state.path;
+    const item=chosen(),disabled=working()||deleteDialog.open,ready=!!state.path;
+    $('files-paste').disabled=disabled||!ready||!clipboard||clipboard.scope!==state.scope;
+    $('files-clipboard').textContent=clipboard?`${clipboard.mode==='move'?'已剪切':'已复制'}：${clipboard.name}${clipboard.scope!==state.scope?'（请返回原文件位置粘贴）':''}`:'';
+    for(const id of ['files-delete-submit','files-delete-close','files-delete-cancel'])$(id).disabled=working();
+    $('files-delete-submit').textContent=state.busy&&deleteDialog.open?'正在删除…':'确认删除';
     for(const id of ['files-upload','files-mkdir','files-refresh','files-path','files-search','files-sort-name','files-sort-size'])$(id).disabled=disabled||!ready;
     $('files-path-form').querySelector('[type=submit]').disabled=disabled||!ready;
     $('files-download').disabled=disabled||item?.kind!=='file'||!!item?.error;
@@ -39,7 +58,7 @@ export async function initializeFileManager(serial,fileDrop){
     $('files-empty').querySelector('p').textContent=ready?'可上传电脑文件，或新建文件夹。':'请检查手机连接，然后选择左侧文件位置。';
     $('files-entry-count').textContent=ready?`${state.entries.length} 项`:'';
     $('files-summary').textContent=item?`${item.name} · ${label(item)}${item.kind==='file'?' · '+fileSize(item.size):''}`:ready?'双击文件夹进入 · 选择文件后下载到电脑':'等待连接';
-    for(const row of $('files-entries').children){row.classList.toggle('selected',row.dataset.path===state.selected);row.setAttribute('aria-selected',String(row.dataset.path===state.selected));row.tabIndex=disabled?-1:0;}
+    for(const row of $('files-entries').children){row.classList.toggle('selected',row.dataset.path===state.selected);row.classList.toggle('files-cut',clipboard?.mode==='move'&&clipboard.scope===state.scope&&row.dataset.path===clipboard.path);row.setAttribute('aria-selected',String(row.dataset.path===state.selected));row.tabIndex=disabled?-1:0;}
   }
   function render(){
     const query=$('files-search').value.toLocaleLowerCase();
@@ -56,6 +75,7 @@ export async function initializeFileManager(serial,fileDrop){
       const size=document.createElement('td');size.textContent=item.kind==='file'?fileSize(item.size):'—';row.append(name,kind,size);
       row.onclick=()=>{if(working())return;state.selected=item.path;update();};
       row.ondblclick=()=>{if(!working()&&['directory','link'].includes(item.kind))void browse(item.path);};
+      row.oncontextmenu=event=>openMenu(event,item);
       row.addEventListener('keydown',event=>{if(event.key===' '&&!working()){event.preventDefault();state.selected=item.path;update();}});
       body.append(row);
     }
@@ -82,7 +102,7 @@ export async function initializeFileManager(serial,fileDrop){
     update();
   }
   async function browse(p=state.path,scope=state.scope){
-    if(working())return;
+    if(working()||deleteDialog.open)return;closeMenu();
     state.loading=true;error();update();
     try{
       const result=await fileCall('BrowseFiles',serial,scope,p);
@@ -108,7 +128,7 @@ export async function initializeFileManager(serial,fileDrop){
     $('files-transfer-icon').textContent=progress.state==='done'?'✓':progress.direction==='upload'?'↑':'↓';
   }
   async function transfer(direction,droppedPaths=null){
-    if(working()||!state.path)return;const item=chosen();if(direction==='download'&&item?.kind!=='file')return;
+    if(working()||modalOpen()||!state.path)return;closeMenu();const item=chosen();if(direction==='download'&&item?.kind!=='file')return;
     state.busy=true;state.cancelling=false;error();update();
     let timer,previous='',polling=false,finished=false;
     try{
@@ -125,7 +145,7 @@ export async function initializeFileManager(serial,fileDrop){
     if(direction==='upload')await browse();
   }
   function openName(kind){
-    if(working()||!state.path)return;const item=chosen();if(kind==='rename'&&!item)return;
+    if(working()||modalOpen()||!state.path)return;closeMenu();const item=chosen();if(kind==='rename'&&!item)return;
     state.dialog={kind,source:item?.path};$('files-name-title').textContent=kind==='rename'?'重命名':'新建文件夹';$('files-name-input').value=kind==='rename'?item.name:'';$('files-name-error').textContent='';$('files-name-dialog').showModal();$('files-name-input').focus();$('files-name-input').select();
   }
   function closeName(){if(!working()){$('files-name-dialog').close();state.dialog=null;}}
@@ -141,6 +161,59 @@ export async function initializeFileManager(serial,fileDrop){
     if(success){closeName();await browse();}
   };
   $('files-name-close').onclick=closeName;$('files-name-cancel').onclick=closeName;
+  function openDelete(){
+    closeMenu();const item=chosen();if(working()||modalOpen()||!item)return;
+    deleteTarget={path:item.path,scope:state.scope};deleteAttempted=false;
+    $('files-delete-title').textContent=item.kind==='directory'?'删除文件夹':'确认删除';
+    $('files-delete-warning').textContent=item.kind==='directory'?'将删除此文件夹及其中的所有内容，删除后无法恢复。':item.kind==='link'?'将删除此符号链接，链接指向的内容保留。删除后无法恢复。':'将从手机中删除此文件，删除后无法恢复。';
+    $('files-delete-path').textContent=item.path;$('files-delete-error').textContent='';
+    deleteDialog.showModal();update();$('files-delete-cancel').focus();
+  }
+  function closeDelete(){
+    if(working())return;deleteDialog.close();deleteTarget=null;update();
+    if(deleteAttempted){deleteAttempted=false;void browse();}
+  }
+  $('files-delete-form').onsubmit=async event=>{
+    event.preventDefault();if(working()||!deleteDialog.open||!deleteTarget)return;
+    state.busy=true;deleteAttempted=true;error();$('files-delete-error').textContent='';update();let success=false;
+    try{await fileCall('DeleteFile',serial,deleteTarget.scope,deleteTarget.path);if(clipboard?.scope===deleteTarget.scope&&clipboard.path===deleteTarget.path)clipboard=null;success=true;}
+    catch(e){$('files-delete-error').textContent=`${message(e)}。目录内容可能已发生变化，关闭后会刷新。`;}
+    finally{state.busy=false;update();}
+    if(success){deleteAttempted=false;closeDelete();await browse();}
+  };
+  $('files-delete-close').onclick=closeDelete;$('files-delete-cancel').onclick=closeDelete;
+  deleteDialog.addEventListener('cancel',event=>{event.preventDefault();closeDelete();});
+  let deleteBackdrop=false;
+  const outsideDelete=event=>{const r=deleteDialog.getBoundingClientRect();return event.target===deleteDialog&&(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom);};
+  deleteDialog.addEventListener('pointerdown',event=>{deleteBackdrop=outsideDelete(event);});
+  deleteDialog.addEventListener('click',event=>{if(deleteBackdrop&&outsideDelete(event))closeDelete();deleteBackdrop=false;});
+  $('files-menu-delete').onclick=openDelete;
+  function copySelection(mode){
+    closeMenu();const item=chosen();if(working()||modalOpen()||!item)return;
+    clipboard={path:item.path,name:item.name,scope:state.scope,mode};error();update();
+  }
+  async function paste(){
+    closeMenu();if(working()||modalOpen()||!state.path||!clipboard)return;
+    if(clipboard.scope!==state.scope){error('请在同一文件位置内粘贴，暂不支持跨文件范围操作');return;}
+    const source=clipboard;state.busy=true;error();update();let failure='';
+    try{await fileCall('PasteFile',serial,source.scope,state.scope,source.path,state.path,source.mode);if(source.mode==='move')clipboard=null;}
+    catch(e){failure=message(e);}
+    finally{state.busy=false;update();}
+    await browse();if(failure)error(failure);
+  }
+  $('files-menu-copy').onclick=()=>copySelection('copy');$('files-menu-cut').onclick=()=>copySelection('move');
+  $('files-menu-paste').onclick=paste;$('files-paste').onclick=paste;
+  $('files-menu-rename').onclick=()=>{closeMenu();openName('rename');};
+  $('files-menu-download').onclick=()=>{closeMenu();void transfer('download');};
+  document.addEventListener('pointerdown',event=>{if(!menu.contains(event.target))closeMenu();});
+  $('files-table-wrap').addEventListener('contextmenu',event=>{if(!event.target.closest('#files-entries tr'))openMenu(event);});
+  document.addEventListener('contextmenu',event=>{if(!event.target.closest('#files-table-wrap'))closeMenu();});
+  window.addEventListener('resize',closeMenu);
+  document.addEventListener('scroll',closeMenu,true);
+  menu.addEventListener('keydown',event=>{
+    const items=[...menu.querySelectorAll('button')].filter(button=>!button.disabled),index=items.indexOf(document.activeElement);
+    if(event.key==='ArrowDown'||event.key==='ArrowUp'){event.preventDefault();items[(index+(event.key==='ArrowDown'?1:items.length-1))%items.length]?.focus();}
+  });
   $('files-mkdir').onclick=()=>openName('mkdir');$('files-rename').onclick=()=>openName('rename');
   $('files-upload').onclick=()=>void transfer('upload');$('files-download').onclick=()=>void transfer('download');
   $('files-cancel').onclick=async()=>{state.cancelling=true;$('files-cancel').disabled=true;try{await fileCall('CancelFileTransfer');$('files-transfer-detail').textContent='正在取消并清理临时文件…';}catch(e){state.cancelling=false;error(message(e));$('files-cancel').disabled=false;}};
@@ -154,17 +227,23 @@ export async function initializeFileManager(serial,fileDrop){
     catch(e){error(message(e));}finally{state.busy=false;update();}
   };
   window.addEventListener('keydown',event=>{
+    if(event.key==='Escape')closeMenu();
     const editing=['INPUT','TEXTAREA','SELECT'].includes(event.target.tagName);
-    if(event.key==='F5'){event.preventDefault();if(!$('files-name-dialog').open)void browse();return;}
+    if(event.key==='F5'){event.preventDefault();if(!modalOpen())void browse();return;}
     if(event.ctrlKey&&event.key.toLowerCase()==='l'){event.preventDefault();$('files-path').focus();$('files-path').select();return;}
-    if(editing||working()||$('files-name-dialog').open)return;
+    if(editing||working()||modalOpen())return;
+    if(event.key==='Enter'&&event.target.tagName==='BUTTON')return;
+    if(event.ctrlKey&&!event.altKey&&!event.metaKey){
+      const key=event.key.toLowerCase();
+      if(['c','x','v'].includes(key)){event.preventDefault();if(key==='v')void paste();else copySelection(key==='x'?'move':'copy');return;}
+    }
     if(event.key==='Backspace'){event.preventDefault();if(state.path!=='/')void browse(parentPath(state.path));}
     if(event.key==='F2'){event.preventDefault();openName('rename');}
     if(event.key==='Enter'){const item=chosen();if(item&&['directory','link'].includes(item.kind)){event.preventDefault();void browse(item.path);}}
   });
   $('files-device-serial').textContent=serial;
   fileDrop?.setTarget(paths=>transfer('upload',paths),()=>({
-    allowed:!!state.path&&!working()&&!$('files-name-dialog').open,
+    allowed:!!state.path&&!working()&&!modalOpen(),
     title:working()?'请等待当前文件操作完成':$('files-name-dialog').open?'请先关闭名称对话框':state.path?'松开以上传到当前手机目录':'请先打开手机目录',
     detail:state.path?`${locationName()} · ${state.path}`:'选择左侧位置后即可拖入电脑文件。'
   }));

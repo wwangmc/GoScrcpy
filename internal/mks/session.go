@@ -9,6 +9,7 @@ import (
 	_ "image/jpeg"
 	_ "image/png"
 	"io"
+	"net"
 	"strings"
 	"sync"
 	"time"
@@ -41,6 +42,7 @@ type Session struct {
 	nextFrame            time.Time
 	started              time.Time
 	quality              string
+	video                net.Conn
 }
 
 func Start(parent context.Context, mux *usbmux.Client, serial string, options scrcpy.Options) (_ *Session, err error) {
@@ -78,20 +80,35 @@ func Start(parent context.Context, mux *usbmux.Client, serial string, options sc
 		return nil, err
 	}
 	s.metadata.Name = strings.Split(info, ";;")[0]
+	// Prefer the independent PhoneVideo plugin. Input still uses mks_tweak.
+	if options.VideoMode != "jpeg" {
+		video, metadata, absent, videoErr := startVideo(ctx, mux, *found, options)
+		if videoErr != nil {
+			return nil, videoErr
+		}
+		if absent && options.VideoMode == "h264" {
+			return nil, fmt.Errorf("未检测到 PhoneVideoTweak 视频服务，无法使用 USB H.264；请安装插件并重启 SpringBoard，或选择截图")
+		}
+		if !absent {
+			s.video, s.metadata = video, metadata
+		}
+	}
 	// ios_control's IOSurface screenshot path is much faster on the installed plugin
 	// than its MJPEG producer. Keep one request in flight and never buffer old frames.
-	s.pending, err = s.nextImage()
-	if err != nil {
-		return nil, fmt.Errorf("读取手机首帧: %w", err)
+	if s.video == nil {
+		s.pending, err = s.nextImage()
+		if err != nil {
+			return nil, fmt.Errorf("读取手机首帧: %w", err)
+		}
+		config, _, err := image.DecodeConfig(bytes.NewReader(s.pending))
+		if err != nil {
+			return nil, fmt.Errorf("手机未返回有效屏幕图像: %w", err)
+		}
+		if config.Width <= 0 || config.Height <= 0 || config.Width > 16384 || config.Height > 16384 {
+			return nil, fmt.Errorf("手机图像尺寸超出范围")
+		}
+		s.metadata.Width, s.metadata.Height = uint32(config.Width), uint32(config.Height)
 	}
-	config, _, err := image.DecodeConfig(bytes.NewReader(s.pending))
-	if err != nil {
-		return nil, fmt.Errorf("手机未返回有效屏幕图像: %w", err)
-	}
-	if config.Width <= 0 || config.Height <= 0 || config.Width > 16384 || config.Height > 16384 {
-		return nil, fmt.Errorf("手机图像尺寸超出范围")
-	}
-	s.metadata.Width, s.metadata.Height = uint32(config.Width), uint32(config.Height)
 	// Match ios_control: input has its own persistent USB WebSocket and does not
 	// wait for an HTTP round trip on every mouse movement. Old plugins can use HTTP.
 	s.control, _ = s.api.ConnectControl(ctx)
@@ -163,6 +180,10 @@ func (s *Session) ReadFrame() ([]byte, error) {
 	if err := s.ctx.Err(); err != nil {
 		return nil, err
 	}
+	if s.video != nil {
+		_ = s.video.SetReadDeadline(time.Now().Add(5 * time.Second))
+		return scrcpy.ReadPacket(s.video)
+	}
 	b := s.pending
 	s.pending = nil
 	if b == nil {
@@ -178,20 +199,33 @@ func (s *Session) ReadFrame() ([]byte, error) {
 	copy(packet[12:], b)
 	return packet, nil
 }
-func (s *Session) SerialNumber() string   { return s.serial }
-func (s *Session) Info() scrcpy.Metadata  { return s.metadata }
-func (s *Session) Encoding() string       { return "jpeg" }
+func (s *Session) SerialNumber() string  { return s.serial }
+func (s *Session) Info() scrcpy.Metadata { return s.metadata }
+func (s *Session) Encoding() string {
+	if s.video != nil {
+		return "h264"
+	}
+	return "jpeg"
+}
 func (s *Session) PointerIntervalMS() int { return 50 }
 func supportedControls() []string {
 	return []string{"touch", "scroll", "text", "keyboard", "home", "recent", "power", "key3", "key26", "key187", "key66", "key67", "key61", "key21", "key22"}
 }
-func (s *Session) Controls() []string           { return supportedControls() }
-func (s *Session) Settings() []string           { return []string{"maxFPS"} }
+func (s *Session) Controls() []string { return supportedControls() }
+func (s *Session) Settings() []string {
+	if s.video != nil {
+		return []string{"maxFPS", "maxSize", "bitRate"}
+	}
+	return []string{"maxFPS"}
+}
 func (s *Session) DoneChannel() <-chan struct{} { return s.done }
 func (s *Session) Logs() string {
 	control := "HTTP"
 	if s.control != nil {
 		control = "WebSocket"
+	}
+	if s.video != nil {
+		return fmt.Sprintf("PhoneVideo / USBMux → device :%d / H.264 / target %d FPS / mks_tweak input %s", PhoneVideoPort, s.fps, control)
 	}
 	return fmt.Sprintf("mks_tweak / USBMux → device :8081 / /screenshot?quality=%s / target %d FPS / input %s", s.quality, s.fps, control)
 }
@@ -219,6 +253,9 @@ func (s *Session) Close() {
 		}
 		s.inputMu.Unlock()
 		s.cancel()
+		if s.video != nil {
+			_ = s.video.Close()
+		}
 		if s.control != nil {
 			_ = s.control.Close()
 		}

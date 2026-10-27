@@ -35,11 +35,14 @@ func clean(p string) (string, error) {
 	return phone.CleanPath(p), nil
 }
 func (m *Manager) shell(ctx context.Context, serial, script string) (string, error) {
+	return m.shellFor(ctx, serial, script, 20*time.Second)
+}
+func (m *Manager) shellFor(ctx context.Context, serial, script string, timeout time.Duration) (string, error) {
 	c, err := m.client()
 	if err != nil {
 		return "", err
 	}
-	ctx, cancel := context.WithTimeout(ctx, 20*time.Second)
+	ctx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
 	output, err := c.Command(ctx, "-s", serial, "shell", "-T", script).CombinedOutput()
 	if err != nil {
@@ -115,6 +118,17 @@ func (m *Manager) List(ctx context.Context, serial, scope, p string) (phone.List
 func missingScript(target string) string {
 	return "[ ! -e " + shellQuote(target) + " ] && [ ! -L " + shellQuote(target) + " ]"
 }
+func (m *Manager) Delete(ctx context.Context, serial, scope, remote string) error {
+	remote, err := phone.DeletePath(remote)
+	if err != nil {
+		return err
+	}
+	// No trailing slash, shell expansion or link traversal. Do not suppress
+	// missing paths or permission errors: the user must see a failed deletion.
+	_, err = m.shell(ctx, serial, "rm -r -- "+shellQuote(remote)+" && "+missingScript(remote))
+	return err
+}
+
 func (m *Manager) Mkdir(ctx context.Context, serial, scope, parent, name string) error {
 	target, err := phone.Child(parent, name)
 	if err != nil {

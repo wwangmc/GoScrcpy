@@ -36,7 +36,11 @@ func (a *App) OpenDevice(serial string, options scrcpy.Options) error {
 	if err != nil {
 		return err
 	}
-	cmd := exec.Command(executable, "--mirror", serial, "--max-size", strconv.Itoa(options.MaxSize), "--max-fps", strconv.Itoa(options.MaxFPS), "--bit-rate", strconv.Itoa(options.BitRate))
+	mode := options.VideoMode
+	if mode == "" {
+		mode = "auto"
+	}
+	cmd := exec.Command(executable, "--mirror", serial, "--max-size", strconv.Itoa(options.MaxSize), "--max-fps", strconv.Itoa(options.MaxFPS), "--bit-rate", strconv.Itoa(options.BitRate), "--video-mode", mode)
 	// This is a GUI executable: hiding its startup window would also hide the
 	// newly created mirror. Only ADB helper commands should use HideWindow.
 	return a.trackWindow(serial, cmd)
@@ -46,7 +50,7 @@ func (a *App) trackWindow(serial string, cmd *exec.Cmd) error {
 	a.windowsMu.Lock()
 	defer a.windowsMu.Unlock()
 	if a.windows[serial] {
-		return fmt.Errorf("该设备的投屏窗口已打开，请切换到对应窗口")
+		return fmt.Errorf("该设备对应的窗口已打开，请切换到已有窗口")
 	}
 	if err := cmd.Start(); err != nil {
 		return fmt.Errorf("无法打开投屏窗口：%w", err)
@@ -69,7 +73,7 @@ func (a *App) GetOpenDevices() []string {
 	defer a.windowsMu.Unlock()
 	result := make([]string, 0, len(a.windows))
 	for serial := range a.windows {
-		if strings.HasPrefix(serial, "files:") {
+		if strings.HasPrefix(serial, "files:") || strings.HasPrefix(serial, "shell:") {
 			continue
 		}
 		result = append(result, serial)

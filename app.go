@@ -20,11 +20,13 @@ import (
 	"phonescreen/internal/adb"
 	"phonescreen/internal/device"
 	"phonescreen/internal/mks"
+	"phonescreen/internal/proxyip"
 	"phonescreen/internal/scrcpy"
 	"phonescreen/internal/usbmux"
 )
 
 type App struct {
+	proxy               proxyService
 	files               fileService
 	ctx                 context.Context
 	cancel              context.CancelFunc
@@ -58,6 +60,7 @@ type LaunchOptions struct {
 }
 
 type SmokeReport struct {
+	Codec  string `json:"codec"`
 	Frames int    `json:"frames"`
 	Width  int    `json:"width"`
 	Height int    `json:"height"`
@@ -77,6 +80,7 @@ type Mirror struct {
 	URL               string          `json:"url"`
 	Metadata          scrcpy.Metadata `json:"metadata"`
 	Codec             string          `json:"codec"`
+	VideoModes        []string        `json:"videoModes"`
 	Controls          []string        `json:"controls"`
 	Settings          []string        `json:"settings"`
 	PointerIntervalMS int             `json:"pointerIntervalMS"`
@@ -111,6 +115,7 @@ func NewApp(server []byte) (*App, error) {
 	}
 	a.address = listener.Addr().String()
 	a.mux.HandleFunc("/stream", a.stream)
+	a.mux.HandleFunc("/yolo", a.yoloStream)
 	a.httpServer = &http.Server{Handler: a.mux, ReadHeaderTimeout: 5 * time.Second}
 	go func() { _ = a.httpServer.Serve(listener) }()
 	return a, nil
@@ -145,11 +150,14 @@ func (a *App) ReportSmoke(report SmokeReport) {
 		if report.Error == "" && (!state.Active || report.Frames < 1 || report.Width <= 0 || report.Height <= 0) {
 			report.Error = "未收到有效 WebView2 解码画面或会话已经关闭"
 		}
+		if mode := a.launchSettings.VideoMode; report.Error == "" && (mode == "jpeg" || mode == "h264") && report.Codec != mode {
+			report.Error = "原生窗口没有使用指定的投屏方式"
+		}
 		a.StopMirror()
 		if report.Error != "" {
 			log.Printf("NATIVE_SMOKE_FAIL: %s; server=%s", report.Error, state.Logs)
 		} else {
-			log.Printf("NATIVE_SMOKE_PASS: device=%s decoded_frames=%d video=%dx%d; Wails binding, USB video, WebView2 rendering and stop completed", a.smokeSerial, report.Frames, report.Width, report.Height)
+			log.Printf("NATIVE_SMOKE_PASS: device=%s codec=%s decoded_frames=%d video=%dx%d; Wails binding, USB video, WebView2 rendering and stop completed", a.smokeSerial, report.Codec, report.Frames, report.Width, report.Height)
 		}
 		if a.wailsContext != nil {
 			wailsruntime.Quit(a.wailsContext)
@@ -234,10 +242,12 @@ func (a *App) StartMirror(serial string, options scrcpy.Options) (Mirror, error)
 	}
 	found := false
 	platform := ""
+	var videoModes []string
 	for _, d := range devices {
 		if d.Serial == serial {
 			found = true
 			platform = d.Platform
+			videoModes = d.VideoModes
 			if d.State != "device" {
 				if d.Error != "" {
 					return Mirror{}, fmt.Errorf("%s", d.Error)
@@ -252,6 +262,12 @@ func (a *App) StartMirror(serial string, options scrcpy.Options) (Mirror, error)
 	}
 	if err = options.Validate(); err != nil {
 		return Mirror{}, err
+	}
+	if platform != "ios" {
+		if options.VideoMode == "jpeg" {
+			return Mirror{}, fmt.Errorf("当前设备仅支持 USB H.264")
+		}
+		videoModes = []string{"h264"}
 	}
 	if a.session != nil {
 		a.session.Close()
@@ -284,7 +300,7 @@ func (a *App) StartMirror(serial string, options scrcpy.Options) (Mirror, error)
 			session.Close()
 		}
 	}()
-	return Mirror{URL: "ws://" + a.address + "/stream?token=" + a.token + "&id=" + a.sessionID, Metadata: session.Info(), Codec: session.Encoding(), Controls: session.Controls(), Settings: session.Settings(), PointerIntervalMS: session.PointerIntervalMS()}, nil
+	return Mirror{URL: "ws://" + a.address + "/stream?token=" + a.token + "&id=" + a.sessionID, Metadata: session.Info(), Codec: session.Encoding(), VideoModes: videoModes, Controls: session.Controls(), Settings: session.Settings(), PointerIntervalMS: session.PointerIntervalMS()}, nil
 }
 
 func (a *App) StopMirror() {
@@ -358,11 +374,15 @@ func (a *App) enableWeb(files fs.FS) {
 			return
 		}
 		var request struct {
-			Args    []string       `json:"args"`
-			Method  string         `json:"method"`
-			Serial  string         `json:"serial"`
-			Options scrcpy.Options `json:"options"`
-			Action  string         `json:"action"`
+			Args         []string        `json:"args"`
+			Method       string          `json:"method"`
+			Serial       string          `json:"serial"`
+			Options      scrcpy.Options  `json:"options"`
+			Action       string          `json:"action"`
+			Clipboard    string          `json:"clipboard"`
+			ProxyOptions proxyip.Options `json:"proxyOptions"`
+			Store        string          `json:"store"`
+			Region       string          `json:"region"`
 		}
 		if err := json.NewDecoder(http.MaxBytesReader(w, r.Body, 8192)).Decode(&request); err != nil {
 			http.Error(w, "invalid request", 400)
@@ -375,6 +395,8 @@ func (a *App) enableWeb(files fs.FS) {
 			result, err = a.GetDevices()
 		case "GetState":
 			result = a.GetState()
+		case "GetYOLOURL":
+			result, err = a.GetYOLOURL(request.Serial)
 		case "GetLaunchOptions":
 			result = a.GetLaunchOptions()
 		case "OpenDevice":
@@ -382,8 +404,30 @@ func (a *App) enableWeb(files fs.FS) {
 		case "GetOpenDevices":
 			result = a.GetOpenDevices()
 		case "DeviceTool":
-			result, err = a.DeviceTool(request.Serial, request.Action)
-		case "OpenFileManager", "BrowseFiles", "FileSharedApps", "CreateFileDirectory", "RenameFile", "UploadFile", "DownloadFile", "GetFileTransfer", "CancelFileTransfer", "GetFileLocation", "RememberDevice":
+			result, err = a.DeviceTool(request.Serial, request.Action, request.Clipboard)
+		case "GetProxyOptions":
+			result, err = a.GetProxyOptions(request.Serial)
+		case "RememberProxyOptions":
+			err = a.RememberProxyOptions(request.Serial, request.ProxyOptions)
+		case "LoadProxyLines":
+			result, err = a.LoadProxyLines()
+		case "ChangeProxy":
+			result, err = a.ChangeProxy(request.Serial, request.ProxyOptions)
+		case "QueryProxyIP":
+			result, err = a.QueryProxyIP(request.Serial)
+		case "OpenIOSCurlStore":
+			err = a.OpenIOSCurlStore(request.Serial, request.Store)
+		case "OpenShell":
+			result, err = a.OpenShell(request.Serial)
+		case "OpenOpenSSHStore":
+			err = a.OpenOpenSSHStore(request.Serial, request.Store)
+		case "GetIOSSettings":
+			result, err = a.GetIOSSettings(request.Serial)
+		case "RememberIOSSettingsRegion":
+			err = a.RememberIOSSettingsRegion(request.Serial, request.Region)
+		case "ApplyIOSSettings":
+			result, err = a.ApplyIOSSettings(request.Serial, request.Region)
+		case "OpenFileManager", "BrowseFiles", "FileSharedApps", "CreateFileDirectory", "RenameFile", "DeleteFile", "PasteFile", "UploadFile", "DownloadFile", "GetFileTransfer", "CancelFileTransfer", "GetFileLocation", "RememberDevice":
 			result, err = a.fileRequest(request.Method, request.Args)
 		case "StartMirror":
 			result, err = a.StartMirror(request.Serial, request.Options)

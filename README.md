@@ -31,9 +31,25 @@ Windows 构建产物：`build/bin/GoScrcpy.exe`。
 
 需要 Windows 10/11 和 Microsoft Edge WebView2 Runtime，Android 视频需要其支持 WebCodecs H.264 解码。Android 设备最低为 Android 5.0，剪贴板粘贴通常需要 Android 7.0+。部分厂商机型还需要开启「USB 调试（安全设置）」才能注入输入事件。iOS 版本支持范围取决于已安装的 `mks_tweak`；当前真机验证为 iOS 15.6。
 
-`mks_tweak` 当前没有标准返回键和音量 HTTP 接口，这些按钮对该设备禁用。支持点击、单点拖动、滚轮转换为滑动、Home、双击 Home 打开任务视图、电源、文字、Enter、Tab、Backspace 和左右光标。现有插件源码将 move 传入 touchDown，拖动已在这台 iOS 15.6 手机上验证，其他插件/系统版本仍需确认实际效果。
+侧边栏及快捷控制会隐藏当前设备未实现的操作：iOS 不显示安卓的局域网 IP、包名、去商店入口，也不显示没有标准接口的返回和音量按钮。暂时断线时，已实现的按钮仍会保留并禁用。Android「去商店」读取电脑剪贴板中的包名，拼接 `market://details?id=com.chaos.drink.sort` 这样的链接并在对应手机上打开；支持直接复制包名、带包名的文字或商店链接，空内容、无效包名及多个不同包名会提示错误，不会打开当前应用的商店页。
+
+`mks_tweak` 支持点击、单点拖动、滚轮转换为滑动、Home、双击 Home 打开任务视图、电源、文字、Enter、Tab、Backspace 和左右光标。现有插件源码将 move 传入 touchDown，拖动已在这台 iOS 15.6 手机上验证，其他插件/系统版本仍需确认实际效果。
 
 ADB 查找顺序：`ADB_PATH` → 可执行程序旁的 `adb.exe` / `tools/adb.exe` → 当前工作目录 `tools/adb.exe` → PATH → `ANDROID_HOME` / `ANDROID_SDK_ROOT` 下的 platform-tools。
+
+## YOLO 实时检测框
+
+iPhone 投屏时，将鼠标移到窗口最右端，在侧栏点击「YOLO」开启画框模式，再次点击关闭。画面实时叠加目标框、类别、置信度，左上角显示目标数量和检测耗时。缩放窗口不改变框与画面的相对位置，叠加层不阻挡鼠标和键盘操作；截图与 USB H.264 投屏均可使用。Android 隐藏此入口。
+
+手机需安装同项目的 PhoneYOLO 并启用服务。GoScrcpy 通过当前 iPhone 的 MKS 只读取得 `/var/mobile/Library/PhoneYOLO/config.json`，使用其中的端口和 token 建立独立 USB WebSocket；无需输入手机 IP、token 或配置 iproxy。PhoneYOLO token 仅保留在 Go 后端，不保存到电脑设置或返回前端。未安装、配置不可读或服务关闭时会提示原因。
+
+空结果立即清除上一帧的框；超过两秒没有新结果、模型出错或方向尚未与投屏同步时隐藏旧框。检测连接意外中断会每三秒尝试重连，配置/认证失败需排查后重新开启。关闭模式、停止投屏、切换投屏方式或退出窗口会关闭本窗口的检测连接；PhoneYOLO 在最后一个客户端断开后停止推理。开启状态不跨窗口或重启保存。
+
+视频与检测来自两条独立实时流，框对应最近收到的检测结果，没有逐帧时间戳对齐；快速移动时可能出现跟随延迟，检测 FPS 取决于手机和模型。
+
+2026-10-26 已在当前 iPhone 上通过 USB + 浏览器诊断界面验证：内置测试画面检出 1 辆公交车、4 个人，1280×720 与 480×880 窗口下画框对齐，关闭模式后清除框和提示。连续 15 帧 USB 测试平均检测耗时约 182 ms，停止投屏后检测连接关闭。[实测截图](docs/yolo-preview.png)。原生 Wails 程序构建成功并能列出设备；原生视觉检查因 Windows 截图工具 `FrameArrived timed out` 未完成。
+
+仅做视频/检测读取、不发送手机输入的真机检查：先加载 `scripts/env.ps1`，设置 `$env:YOLO_TEST_DEVICE='auto'`（多台 iPhone 时指定序列号），再运行 `go test -count=1 -v -run TestYOLODeviceStream .`。普通 `scripts/test.ps1` 包含 USB 模拟服务的连接认证、手机隔离、重连和停止清理，以及前端绘框/空结果/过期结果测试。
 
 ## 文件管理与双向传输
 
@@ -45,13 +61,41 @@ ADB 查找顺序：`ADB_PATH` → 可执行程序旁的 `adb.exe` / `tools/adb.e
 
 - iOS 移植 PocketFiles 的目录浏览、上传、下载、新建文件夹、重命名、传输进度和取消功能，支持 AFC2 根目录、AFC 媒体目录及应用共享文档。AFC2 不可用时，首次打开自动尝试媒体目录；文件服务不依赖 MKS 投屏服务。
 - Android 使用相同界面，默认浏览 `/sdcard`，提供 Download、DCIM、Pictures、Documents 快捷入口。目录权限沿用手机授予 ADB 的权限，不能读取的目录会显示错误并保留原目录。
-- 双击目录进入；可在路径框直接输入目录。选择电脑文件上传到手机当前目录；选择手机普通文件后点击「下载到电脑」，通过系统对话框选择保存位置。支持拖入多个电脑文件按顺序上传，暂不复制整个文件夹、不自动安装 APK、不提供删除功能。
+- 双击目录进入；可在路径框直接输入目录。选择电脑文件上传到手机当前目录；选择手机普通文件后点击「下载到电脑」，通过系统对话框选择保存位置。支持拖入多个电脑文件按顺序上传，暂不递归上传整个电脑文件夹，不自动安装 APK。
+- 右键文件或文件夹可下载、复制、剪切、重命名和删除；目标目录空白处右键粘贴，也可使用工具栏「粘贴」及 Ctrl+C / Ctrl+X / Ctrl+V。支持同一手机、同一文件范围内的文件和完整文件夹操作，iOS 的根目录、媒体和不同应用文档范围之间暂不互相粘贴。符号链接保留为链接，不遍历其目标。遇到同名目标会拒绝覆盖；剪切成功才清空记录，复制失败不会删除源文件。
+- 删除前显示确认窗口和完整路径，文件夹会连同内容删除，取消或 Escape 不执行删除；删除符号链接仅移除链接。操作完成会刷新目录，根目录禁止删除，文件操作与上传下载互斥。复制先在目标目录中创建临时副本，成功后发布；失败尝试清理临时目录，断线时可能遗留。
 - 可直接从资源管理器或桌面拖入文件：拖到文件管理窗口上传至当前目录；拖到连接窗口或投屏画面则发送到 Android 的 `/sdcard/Download` 或 iOS 媒体根目录。拖入时显示目标提示，批量上传显示总字节进度和当前文件序号，可取消剩余传输；已经完成的文件会保留。链接、文件夹及同名冲突会明确提示，不会触发浏览器下载或跳转。
 - 支持当前目录筛选、按名称或大小排序，以及 F2 重命名、F5 刷新、Ctrl+L 定位路径框、Backspace 返回上级。
 - 内容在 Go 后端按块流式传输，不经过前端或云端。显示字节进度，支持取消。上传先写随机临时文件，校验大小后再发布；下载写入电脑临时文件，同步完成后发布。拒绝覆盖已有目标，失败/取消会清理本次临时文件；设备完全断开时可能无法清理手机上的临时文件。
 - 共享应用是否允许访问文档由 iOS 决定。越狱侧载应用可能被系统拒绝，可改用 AFC2 根目录定位其文件。
 
 验证：Android Pixel 2 双向传输 2,520,000 字节、iPhone 双向传输 2,640,000 字节，逐字节一致；中文及特殊字符文件名、同名拒绝、重命名、取消清理通过。iOS 根目录、媒体目录和可用共享应用文档均经 USB 真机验证。
+
+## iOS 一键设置
+
+已迁移「凭证筛选」插件的一键设置功能。iPhone 的设备右键菜单和投屏侧边栏提供「一键设置 iOS」入口，Android 隐藏此项，后端也拒绝 Android 请求。
+
+选择目标地区后，可预览系统语言、地区格式、时区和插件运营商参数条数，点击「一键应用」提交。语言/地区由手机异步应用；界面以手机接口是否接收成功报告结果，失败或响应不确定时不自动重发。
+
+原插件的 `region_setting.json` 和 `opt.json` 已复制到 `internal/iossettings/data/` 并嵌入程序，共支持 47 个两份数据均适配的地区。完整保留各地区运营商 JSON，以原接口 `POST /setAllSetting?timeZone=...&locale=...&lang=...` 经对应手机的 USB MKS 连接发送；不依赖外层 Chrome 插件目录。兼容原数据中小写的 `kw` 运营商键。每台 iPhone 分别记住上次选择的地区。
+
+## 手机 Shell 命令行
+
+投屏侧边栏的「Shell」或连接列表中设备的右键菜单「Shell 命令行」可打开独立命令行窗口，关闭或退出该窗口不影响投屏和文件管理。
+
+- Android：运行指定设备的交互式 `adb shell -tt`，支持持续输出、Ctrl+C、方向键和 `exit`。使用 ADB 已授权的 shell 权限，不自动提权。
+- iOS：直接通过 USBMux 连接手机 OpenSSH，不需要 Wi-Fi、手动 iproxy 或电脑另装 SSH 客户端。窗口中输入 SSH 账号和手机端口（默认 root / 22），首次连接需确认手机 SSH 指纹，再输入不回显的密码。密码不写入设置或日志；主机指纹按手机保存，变化时拒绝连接。支持交互 PTY、Ctrl+C 和窗口尺寸变化。
+- iOS 缺少 OpenSSH 时，弹窗可选择 Sileo、Cydia 或关闭，分别打开对应手机的 `sileo://package/openssh`、`cydia://package/openssh` 安装页。已安装但默认端口未响应时提示检查 sshd 服务或输入自定义端口；无法检测时保留实际连接入口，不把连接失败一概认定为未安装。
+- Shell 窗口按手机独立跟踪，不计入投屏窗口列表。命令在手机上执行，权限由 ADB / SSH 登录账号决定。
+
+## 手机换 IP
+
+投屏侧边栏点击「换 IP」，选择代理线路及两位地区代码。沿用 `chrome-shadowrocket` 的代理列表接口和账号模板规则，每次操作生成新的数字会话，替换账号、密码中的 `{region}`、`{uuid}`。每台手机分别记住线路、地区、目标包名和节点名，账号密码不写入本地设置，也不返回到界面。
+
+- iOS：通过对应设备的 USB MKS 接口断开 VPN、打开 Shadowrocket、导入 SOCKS5、设置全局代理路由、开启 VPN，并检查 VPN 状态。失败或超时不自动重试，避免重复执行不确定的切换。查询 IP 时若缺少 curl，会弹窗提供 Sileo、Cydia 和关闭三个选项；选择商店后在对应手机打开 `sileo://package/curl` 或 `cydia://package/curl`，关闭则不执行手机命令。安装完成后再次查询即可。
+- Android：通过 ADB 打开 `clash://install-config?url=<完整编码的配置下载地址>&name=...`。下载接口固定为 `http://47.96.125.116:8088/proxy/getclash`；`appid` 默认 `com.mobile.legends`，可填写或读取当前应用；`name1` 默认 `cs`；`proxies1` 包含 SOCKS5 服务器、端口以及替换后的账号密码。内部参数和外层下载 URL 分别编码，特殊字符不会截断参数。
+- Clash 链接打开的是导入页，需在投屏画面保存、选中新配置并启用 Clash，程序显示「待手机确认」，不把发出链接当作换 IP 成功。链接行为见 [Clash Meta for Android 官方说明](https://github.com/MetaCubeX/ClashMetaForAndroid#automation)。
+- 「查询 IP」在对应手机执行 curl 联网查询，展示手机出口 IP、地区、运营商及组织。Android 先检查系统 curl；缺失时自动将 `assets/android/curl` 内置的 ARM64 二进制推送到 `/data/local/tmp/goscrcpy/`，校验 SHA-256、设置执行权限并检查可运行后启用，下次复用。二进制已嵌入 EXE，无需保留项目外层的原文件，不修改手机系统目录。iOS 仍使用手机已安装的 curl。开启 VPN 不代表供应商一定分配了不同出口，应以手机查询结果为准。
 
 ## USB 与端口
 
@@ -149,3 +193,12 @@ iPhone11,8 / iOS 15.6：已通过 USB 读取 MKS 设备信息并在原生 Wails 
 - [控制协议序列化](https://github.com/Genymobile/scrcpy/blob/v3.3.4/app/src/control_msg.c)
 
 嵌入服务端 SHA-256：`8588238c9a5a00aa542906b6ec7e6d5541d9ffb9b5d0f6e1bc0e365e2303079e`。Android 服务端使用 Apache-2.0 许可证，原文见 `assets/scrcpy-LICENSE`。原 QtScrcpy 源码保留在同级 `../QtScrcpy/`，本工程未复制其 C++ 核心。
+## 独立 iOS H.264 插件（实验）
+
+同级目录 [PhoneVideoTweak](../PhoneVideoTweak/README.md) 提供独立的 Theos / GitHub Actions 项目，不修改 mks_tweak。安装匹配越狱类型的 PhoneVideo deb 并重启 SpringBoard 后，GoScrcpy 自动优先通过 USBMux 连接手机 `27184` 端口读取 H.264；输入控制继续走原 mks_tweak。没有新插件时保留原截图方式，不占用电脑 8081，也不新增区分系统的界面。
+
+在投屏页「设置 → 画面设置 → 投屏方式」可以查看当前实际使用的是「截图」还是「USB H.264」，并直接切换。切换会释放按住的触摸与键盘、重新建立视频连接；如果连接失败，会尝试恢复原方式。选择截图后不启动视频插件，分辨率和码率选项禁用。设备检测会仅探测手机的视频服务端口，不启动编码器；未检测到 PhoneVideoTweak 时，H.264 选项禁用并显示安装提示。手动指定 H.264 时不会静默退回截图。命令行可以使用 `--video-mode jpeg`、`--video-mode h264`，默认 `auto`。
+
+已通过真实 iPhone 上截图/H.264 多次切换、切换后读帧、无插件的双设备能力检测和禁止强制 H.264 回退测试。原生自检可用 `scripts/smoke.ps1 -DeviceSerial <UDID> -VideoMode jpeg` 或 `-VideoMode h264` 分别验证实际解码方式。
+
+日志中 `PhoneVideo / USBMux → device :27184 / H.264` 表示新视频路径。插件已连接但编码启动失败会报错，不会悄悄回退。插件的私有全屏采集、iOS 15.6 兼容性、实际编码性能和手机安装效果仍需编译后真机验证，详见插件 README。

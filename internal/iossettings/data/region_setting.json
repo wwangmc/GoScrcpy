@@ -1,0 +1,237 @@
+{
+  "US": {
+    "locale": "en_US",
+    "lang": "en-US",
+    "timeZone": "America/New_York"
+  },
+  "UK": {
+    "locale": "en_GB",
+    "lang": "en-GB",
+    "timeZone": "Europe/London"
+  },
+  "CA": {
+    "locale": "en_CA",
+    "lang": "en-CA",
+    "timeZone": "America/Toronto"
+  },
+  "FR": {
+    "locale": "fr_FR",
+    "lang": "fr-FR",
+    "timeZone": "Europe/Paris"
+  },
+  "DE": {
+    "locale": "de_DE",
+    "lang": "de-DE",
+    "timeZone": "Europe/Berlin"
+  },
+  "IT": {
+    "locale": "it_IT",
+    "lang": "it-IT",
+    "timeZone": "Europe/Rome"
+  },
+  "ES": {
+    "locale": "es_ES",
+    "lang": "es-ES",
+    "timeZone": "Europe/Madrid"
+  },
+  "AU": {
+    "locale": "en_AU",
+    "lang": "en-AU",
+    "timeZone": "Australia/Sydney"
+  },
+  "IN": {
+    "locale": "hi_IN",
+    "lang": "hi-IN",
+    "timeZone": "Asia/Kolkata"
+  },
+  "JP": {
+    "locale": "ja_JP",
+    "lang": "ja-JP",
+    "timeZone": "Asia/Tokyo"
+  },
+  "TW": {
+    "locale": "zh_TW",
+    "lang": "zh-TW",
+    "timeZone": "Asia/Taipei"
+  },
+  "HK": {
+    "locale": "zh_HK",
+    "lang": "zh-HK",
+    "timeZone": "Asia/Hong_Kong"
+  },
+  "SG": {
+    "locale": "en_SG",
+    "lang": "en-SG",
+    "timeZone": "Asia/Singapore"
+  },
+  "BR": {
+    "locale": "pt_BR",
+    "lang": "pt-BR",
+    "timeZone": "America/Sao_Paulo"
+  },
+  "MX": {
+    "locale": "es_MX",
+    "lang": "es-MX",
+    "timeZone": "America/Mexico_City"
+  },
+  "RU": {
+    "locale": "ru_RU",
+    "lang": "ru-RU",
+    "timeZone": "Europe/Moscow"
+  },
+  "TH": {
+    "locale": "th_TH",
+    "lang": "th-TH",
+    "timeZone": "Asia/Bangkok"
+  },
+  "PH": {
+    "locale": "en_PH",
+    "lang": "en-PH",
+    "timeZone": "Asia/Manila"
+  },
+  "ID": {
+    "locale": "in_ID",
+    "lang": "in-ID",
+    "timeZone": "Asia/Jakarta"
+  },
+  "MY": {
+    "locale": "ms_MY",
+    "lang": "ms-MY",
+    "timeZone": "Asia/Kuala_Lumpur"
+  },
+  "VN": {
+    "locale": "vi_VN",
+    "lang": "vi-VN",
+    "timeZone": "Asia/Saigon"
+  },
+  "KR": {
+    "locale": "ko_KR",
+    "lang": "ko-KR",
+    "timeZone": "Asia/Seoul"
+  },
+  "NL": {
+    "locale": "nl_NL",
+    "lang": "nl-NL",
+    "timeZone": "Europe/Amsterdam"
+  },
+  "SA": {
+    "locale": "ar_SA",
+    "lang": "ar-SA",
+    "timeZone": "Asia/Riyadh"
+  },
+  "AE": {
+    "locale": "ar_AE",
+    "lang": "ar-AE",
+    "timeZone": "Asia/Dubai"
+  },
+  "PL": {
+    "locale": "pl_PL",
+    "lang": "pl-PL",
+    "timeZone": "Europe/Warsaw"
+  },
+  "IE": {
+    "locale": "en_IE",
+    "lang": "en-IE",
+    "timeZone": "Europe/Dublin"
+  },
+  "BE": {
+    "locale": "nl_BE",
+    "lang": "nl-BE",
+    "timeZone": "Europe/Brussels"
+  },
+  "KW": {
+    "locale": "ar_KW",
+    "lang": "ar-KW",
+    "timeZone": "Asia/Kuwait"
+  },
+  "EG": {
+    "locale": "ar_EG",
+    "lang": "ar-EG",
+    "timeZone": "Africa/Cairo"
+  },
+  "TR": {
+    "locale": "tr_TR",
+    "lang": "tr-TR",
+    "timeZone": "Europe/Istanbul"
+  },
+  "ZA": {
+    "locale": "en_ZA",
+    "lang": "en-ZA",
+    "timeZone": "Africa/Johannesburg"
+  },
+  "HU": {
+    "locale": "hu_HU",
+    "lang": "hu-HU",
+    "timeZone": "Europe/Budapest"
+  },
+  "CH": {
+    "locale": "de_CH",
+    "lang": "de-CH",
+    "timeZone": "Europe/Zurich"
+  },
+  "SE": {
+    "locale": "sv_SE",
+    "lang": "sv-SE",
+    "timeZone": "Europe/Stockholm"
+  },
+  "NO": {
+    "locale": "nb_NO",
+    "lang": "nb-NO",
+    "timeZone": "Europe/Oslo"
+  },
+  "DK": {
+    "locale": "da_DK",
+    "lang": "da-DK",
+    "timeZone": "Europe/Copenhagen"
+  },
+  "FI": {
+    "locale": "fi_FI",
+    "lang": "fi-FI",
+    "timeZone": "Europe/Helsinki"
+  },
+  "AT": {
+    "locale": "de_AT",
+    "lang": "de-AT",
+    "timeZone": "Europe/Vienna"
+  },
+  "CZ": {
+    "locale": "cs_CZ",
+    "lang": "cs-CZ",
+    "timeZone": "Europe/Prague"
+  },
+  "QA": {
+    "locale": "ar_QA",
+    "lang": "ar-QA",
+    "timeZone": "Asia/Qatar"
+  },
+  "AF": {
+    "locale": "fa_AF",
+    "lang": "fa-AF",
+    "timeZone": "Asia/Kabul"
+  },
+  "IL": {
+    "locale": "he_IL",
+    "lang": "he-IL",
+    "timeZone": "Asia/Jerusalem"
+  },
+  "CL": {
+    "locale": "es_CL",
+    "lang": "es-CL",
+    "timeZone": "America/Santiago"
+  },
+  "CO": {
+    "locale": "es_CO",
+    "lang": "es-CO",
+    "timeZone": "America/Bogota"
+  },
+  "AR": {
+    "locale": "es_AR",
+    "lang": "es-AR",
+    "timeZone": "America/Buenos_Aires"
+  },
+  "PT": {
+    "locale": "pt_PT",
+    "lang": "pt-PT",
+    "timeZone": "Europe/Lisbon"
+  }
+}

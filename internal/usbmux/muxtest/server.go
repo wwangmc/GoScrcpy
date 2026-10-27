@@ -24,6 +24,16 @@ type Server struct {
 }
 
 func Start(t *testing.T, targets map[uint32]string) *Server {
+	ports := make(map[uint32]map[uint16]string, len(targets))
+	for id, address := range targets {
+		ports[id] = map[uint16]string{8081: address}
+	}
+	return StartPorts(t, ports)
+}
+
+// StartPorts routes phone ports separately, allowing independent video and input
+// connections and multiple phones without fixed host ports.
+func StartPorts(t *testing.T, targets map[uint32]map[uint16]string) *Server {
 	t.Helper()
 	l, err := net.Listen("tcp", "127.0.0.1:0")
 	if err != nil {
@@ -60,7 +70,7 @@ func Start(t *testing.T, targets map[uint32]string) *Server {
 	return s
 }
 
-func (s *Server) serve(conn net.Conn, targets map[uint32]string) {
+func (s *Server) serve(conn net.Conn, targets map[uint32]map[uint16]string) {
 	defer func() { _ = conn.Close(); s.mu.Lock(); delete(s.sockets, conn); s.mu.Unlock(); s.Active.Add(-1) }()
 	header := make([]byte, 16)
 	if _, err := io.ReadFull(conn, header); err != nil {
@@ -93,7 +103,8 @@ func (s *Server) serve(conn net.Conn, targets map[uint32]string) {
 		reply = map[string]any{"DeviceList": list}
 	} else if request.Message == "Connect" {
 		code := uint64(3)
-		if address, ok := targets[request.ID]; ok && request.Port == 0x911f { // htons(8081)
+		port := request.Port>>8 | request.Port<<8
+		if address, ok := targets[request.ID][port]; ok {
 			var err error
 			remote, err = net.Dial("tcp", address)
 			if err == nil {

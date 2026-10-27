@@ -9,7 +9,7 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Go 测试失败' }
     go vet ./...
     if ($LASTEXITCODE -ne 0) { throw 'Go 静态检查失败' }
-    node --test --test-isolation=none frontend/protocol.test.mjs frontend/drop.test.mjs
+    node --test --test-isolation=none frontend/protocol.test.mjs frontend/drop.test.mjs frontend/proxy.test.mjs frontend/shell.test.mjs frontend/ios-settings.test.mjs frontend/files.test.mjs frontend/tools.test.mjs frontend/yolo.test.mjs
     if ($LASTEXITCODE -ne 0) { throw '前端协议测试失败' }
 } finally {
     $env:SCRCPY_TEST_DEVICE = $previousDevice
