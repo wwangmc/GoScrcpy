@@ -21,6 +21,8 @@ type fileSystem interface {
 	List(context.Context, string, string, string) (phone.Listing, error)
 	Mkdir(context.Context, string, string, string, string) error
 	Rename(context.Context, string, string, string, string) error
+	Delete(context.Context, string, string, string) error
+	Paste(context.Context, string, string, string, string, bool) error
 	Upload(context.Context, string, string, string, string, func(int64, int64)) error
 	Download(context.Context, string, string, string, string, func(int64, int64)) error
 }
@@ -162,6 +164,42 @@ func (a *App) RenameFile(serial, scope, remote, name string) error {
 	}
 	return backend.Rename(a.ctx, serial, resolved, remote, name)
 }
+func (a *App) DeleteFile(serial, scope, remote string) error {
+	if err := a.lockFiles(); err != nil {
+		return err
+	}
+	defer a.files.ops.Unlock()
+	if _, err := phone.DeletePath(remote); err != nil {
+		return err
+	}
+	backend, _, resolved, err := a.fileBackend(serial, scope)
+	if err != nil {
+		return err
+	}
+	return backend.Delete(a.ctx, serial, resolved, remote)
+}
+
+func (a *App) PasteFile(serial, sourceScope, scope, source, parent, mode string) error {
+	if err := a.lockFiles(); err != nil {
+		return err
+	}
+	defer a.files.ops.Unlock()
+	if mode != "copy" && mode != "move" {
+		return errors.New("未知粘贴操作")
+	}
+	if _, err := phone.PasteTarget(source, parent); err != nil {
+		return err
+	}
+	backend, _, resolved, err := a.fileBackend(serial, scope)
+	if err != nil {
+		return err
+	}
+	if sourceScope != resolved {
+		return errors.New("请在同一文件位置内粘贴，暂不支持跨文件范围操作")
+	}
+	return backend.Paste(a.ctx, serial, resolved, source, parent, mode == "move")
+}
+
 func (a *App) GetFileTransfer() FileTransfer {
 	a.files.mu.Lock()
 	defer a.files.mu.Unlock()

@@ -65,3 +65,13 @@
 .device-menu button{display:block;width:100%;padding:10px 14px;text-align:left;border:0;border-radius:4px;background:transparent;color:#d4e3f3;font-size:12px}
 .device-menu button:hover:enabled,.device-menu button:focus-visible{background:#2c473f;color:#a5eccb;outline:none}
 #refresh{transition:none}
+.files-table tr.files-cut td{opacity:.5}#files-menu small{float:right;margin-left:20px;color:#829db6}#files-clipboard{color:#87bda6;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:50%}
+.device-menu button.files-danger{color:#f19c9c}.device-menu button.files-danger:hover:enabled,.device-menu button.files-danger:focus-visible{background:#59353c;color:#ffd0d0}
+#files-delete-dialog{width:min(420px,calc(100vw - 24px))}#files-delete-warning{font-size:13px;line-height:1.8;color:#e8bb9f}#files-delete-path{font-size:12px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere;color:#d2e2ef;max-height:160px;overflow:auto}#files-delete-error{font-size:12px;line-height:1.8;color:#f19c9c;overflow-wrap:anywhere}#files-delete-submit{background:#8b3542;border:1px solid #b45461;color:#fff;padding:9px 16px;border-radius:6px}
+#ios-settings-search{display:block;width:100%;padding:10px;margin-top:8px}#ios-settings-search-status{margin-top:7px}
+#ios-settings-dialog{width:min(370px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow:auto}#ios-settings-dialog select{padding:10px}.ios-settings-preview{display:grid;grid-template-columns:auto minmax(0,1fr);gap:13px 16px;margin:22px 0;font-size:12px;line-height:1.7}.ios-settings-preview dt{color:#829db6}.ios-settings-preview dd{margin:0;color:#d2e2ef;overflow-wrap:anywhere}#ios-settings-apply{width:100%}#ios-settings-status{font-size:12px;line-height:1.8;overflow-wrap:anywhere;margin-top:15px;color:#9ab9ac}#ios-settings-status.error{color:#e8b39c}
+#openssh-dialog{width:min(360px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow:auto}#openssh-dialog p{margin-top:14px;font-size:12px;line-height:1.8;overflow-wrap:anywhere;color:#a4bad0}.openssh-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:20px}.openssh-actions button{flex:1;white-space:nowrap}#openssh-status{color:#e8b39c!important}
+.video-mode-label{display:flex;align-items:center;justify-content:space-between;gap:6px}
+#video-mode-current{font-size:10px;font-weight:400;color:var(--green)}
+#video-mode-hint{margin:6px 0 12px;line-height:1.6}
+#video-mode:disabled{opacity:.65;cursor:not-allowed}

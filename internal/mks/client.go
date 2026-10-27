@@ -158,7 +158,7 @@ func Scan(ctx context.Context, mux *usbmux.Client) ([]device.Device, error) {
 				return
 			}
 			defer func() { <-limit }()
-			item := device.Device{Serial: d.Properties.Serial, State: "unavailable", Model: "iPhone", Transport: "USB", Platform: "ios", Codec: "jpeg", Controls: supportedControls(), Settings: []string{"maxFPS"}}
+			item := device.Device{Serial: d.Properties.Serial, State: "unavailable", Model: "iPhone", Transport: "USB", Platform: "ios", Codec: "jpeg", VideoModes: []string{"jpeg"}, Controls: supportedControls(), Settings: []string{"maxFPS"}}
 			api := NewAPI(mux, d)
 			defer api.Close()
 			probe, cancel := context.WithTimeout(ctx, 1800*time.Millisecond)
@@ -174,6 +174,11 @@ func Scan(ctx context.Context, mux *usbmux.Client) ([]device.Device, error) {
 					item.Model = parts[0]
 					item.Product = parts[3]
 					item.State = "device"
+					if hasPhoneVideo(probe, mux, d) {
+						item.VideoModes = []string{"jpeg", "h264"}
+						item.Codec = "h264"
+						item.Settings = []string{"maxFPS", "maxSize", "bitRate"}
+					}
 				}
 			}
 			result[i] = item

@@ -1,0 +1,2742 @@
+{
+  "CA": {
+    "country": "Canada",
+    "country_code": "1",
+    "country_name": "加拿大",
+    "ios": "CA",
+    "opts": [
+      {
+        "mcc": "302",
+        "mnc": "720",
+        "name": "Rogers Wireless",
+        "network": "Rogers Wireless"
+      },
+      {
+        "mcc": "302",
+        "mnc": "721",
+        "name": "Rogers Wireless",
+        "network": "Rogers Wireless"
+      },
+      {
+        "mcc": "302",
+        "mnc": "640",
+        "name": "Bell Mobility",
+        "network": "Bell Mobility"
+      },
+      {
+        "mcc": "302",
+        "mnc": "690",
+        "name": "Bell Mobility",
+        "network": "Bell Mobility"
+      },
+      {
+        "mcc": "302",
+        "mnc": "680",
+        "name": "SaskTel Mobility",
+        "network": "SaskTel Mobility"
+      },
+      {
+        "mcc": "302",
+        "mnc": "750",
+        "name": "SaskTel Mobility",
+        "network": "SaskTel Mobility"
+      }
+    ]
+  },
+  "US": {
+    "country": "United States",
+    "country_code": "1",
+    "country_name": "美国",
+    "ios": "US",
+    "opts": [
+      {
+        "mcc": "310",
+        "mnc": "680",
+        "name": "AT&T",
+        "network": "AT&T"
+      },
+      {
+        "mcc": "310",
+        "mnc": "070",
+        "name": "AT&T",
+        "network": "AT&T"
+      },
+      {
+        "mcc": "310",
+        "mnc": "410",
+        "name": "AT&T",
+        "network": "AT&T"
+      },
+      {
+        "mcc": "310",
+        "mnc": "380",
+        "name": "AT&T",
+        "network": "AT&T"
+      },
+      {
+        "mcc": "310",
+        "mnc": "013",
+        "name": "Verizon",
+        "network": "Verizon"
+      },
+      {
+        "mcc": "311",
+        "mnc": "281",
+        "name": "Verizon",
+        "network": "Verizon"
+      },
+      {
+        "mcc": "311",
+        "mnc": "286",
+        "name": "Verizon",
+        "network": "Verizon"
+      },
+      {
+        "mcc": "311",
+        "mnc": "480",
+        "name": "Verizon",
+        "network": "Verizon"
+      },
+      {
+        "mcc": "311",
+        "mnc": "275",
+        "name": "Verizon",
+        "network": "Verizon"
+      },
+      {
+        "mcc": "310",
+        "mnc": "160",
+        "name": "T-Mobile",
+        "network": "T-Mobile"
+      },
+      {
+        "mcc": "310",
+        "mnc": "220",
+        "name": "T-Mobile",
+        "network": "T-Mobile"
+      },
+      {
+        "mcc": "310",
+        "mnc": "270",
+        "name": "T-Mobile",
+        "network": "T-Mobile"
+      },
+      {
+        "mcc": "310",
+        "mnc": "260",
+        "name": "T-Mobile",
+        "network": "T-Mobile"
+      }
+    ]
+  },
+  "RU": {
+    "country": "Russian Federation",
+    "country_code": "7",
+    "country_name": "俄罗斯联邦",
+    "ios": "RU",
+    "opts": [
+      {
+        "mcc": "250",
+        "mnc": "28",
+        "name": "Beeline",
+        "network": "Beeline"
+      },
+      {
+        "mcc": "250",
+        "mnc": "14",
+        "name": "Megafon",
+        "network": "Megafon"
+      },
+      {
+        "mcc": "250",
+        "mnc": "02",
+        "name": "Megafon",
+        "network": "Megafon"
+      },
+      {
+        "mcc": "250",
+        "mnc": "01",
+        "name": "MTS",
+        "network": "MTS"
+      },
+      {
+        "mcc": "250",
+        "mnc": "03",
+        "name": "NCC",
+        "network": "NCC"
+      },
+      {
+        "mcc": "250",
+        "mnc": "20",
+        "name": "Tele2",
+        "network": "Tele2"
+      }
+    ]
+  },
+  "EG": {
+    "country": "Egypt",
+    "country_code": "20",
+    "country_name": "埃及",
+    "ios": "EG",
+    "opts": [
+      {
+        "mcc": "602",
+        "mnc": "01",
+        "name": "Orange",
+        "network": "Orange"
+      },
+      {
+        "mcc": "602",
+        "mnc": "03",
+        "name": "Etisalat",
+        "network": "Etisalat"
+      },
+      {
+        "mcc": "602",
+        "mnc": "02",
+        "name": "Vodafone",
+        "network": "Vodafone"
+      }
+    ]
+  },
+  "ZA": {
+    "country": "South Africa",
+    "country_code": "27",
+    "country_name": "南非",
+    "ios": "ZA",
+    "opts": [
+      {
+        "mcc": "655",
+        "mnc": "02",
+        "name": "8.ta",
+        "network": "8.ta"
+      },
+      {
+        "mcc": "655",
+        "mnc": "73",
+        "name": "iBurst",
+        "network": "iBurst"
+      },
+      {
+        "mcc": "655",
+        "mnc": "02",
+        "name": "Telkom",
+        "network": "Telkom"
+      },
+      {
+        "mcc": "655",
+        "mnc": "12",
+        "name": "MTN",
+        "network": "MTN"
+      },
+      {
+        "mcc": "655",
+        "mnc": "10",
+        "name": "MTN",
+        "network": "MTN"
+      },
+      {
+        "mcc": "655",
+        "mnc": "13",
+        "name": "Neotel",
+        "network": "Neotel"
+      },
+      {
+        "mcc": "655",
+        "mnc": "14",
+        "name": "Neotel",
+        "network": "Neotel"
+      }
+    ]
+  },
+  "NL": {
+    "country": "Netherlands",
+    "country_code": "31",
+    "country_name": "荷兰",
+    "ios": "NL",
+    "opts": [
+      {
+        "mcc": "204",
+        "mnc": "10",
+        "name": "KPN",
+        "network": "KPN"
+      },
+      {
+        "mcc": "204",
+        "mnc": "08",
+        "name": "KPN",
+        "network": "KPN"
+      },
+      {
+        "mcc": "204",
+        "mnc": "16",
+        "name": "T-Mobile",
+        "network": "T-Mobile"
+      },
+      {
+        "mcc": "204",
+        "mnc": "20",
+        "name": "T-Mobile",
+        "network": "T-Mobile"
+      }
+    ]
+  },
+  "BE": {
+    "country": "Belgium",
+    "country_code": "32",
+    "country_name": "比利时",
+    "ios": "BE",
+    "opts": [
+      {
+        "mcc": "206",
+        "mnc": "09",
+        "name": "Voxbone",
+        "network": "Voxbone"
+      },
+      {
+        "mcc": "206",
+        "mnc": "01",
+        "name": "Proximus",
+        "network": "Proximus"
+      },
+      {
+        "mcc": "206",
+        "mnc": "00",
+        "name": "Proximus",
+        "network": "Proximus"
+      },
+      {
+        "mcc": "206",
+        "mnc": "10",
+        "name": "Orange Belgium",
+        "network": "Orange Belgium"
+      },
+      {
+        "mcc": "206",
+        "mnc": "05",
+        "name": "Telenet",
+        "network": "Telenet"
+      }
+    ]
+  },
+  "FR": {
+    "country": "France",
+    "country_code": "33",
+    "country_name": "法国",
+    "ios": "FR",
+    "opts": [
+      {
+        "mcc": "208",
+        "mnc": "24",
+        "name": "MobiquiThings",
+        "network": "MobiquiThings"
+      },
+      {
+        "mcc": "208",
+        "mnc": "03",
+        "name": "MobiquiThings",
+        "network": "MobiquiThings"
+      },
+      {
+        "mcc": "208",
+        "mnc": "02",
+        "name": "Orange",
+        "network": "Orange"
+      },
+      {
+        "mcc": "208",
+        "mnc": "01",
+        "name": "Orange",
+        "network": "Orange"
+      },
+      {
+        "mcc": "208",
+        "mnc": "08",
+        "name": "SFR",
+        "network": "SFR"
+      },
+      {
+        "mcc": "208",
+        "mnc": "10",
+        "name": "SFR",
+        "network": "SFR"
+      }
+    ]
+  },
+  "ES": {
+    "country": "Spain",
+    "country_code": "34",
+    "country_name": "西班牙",
+    "ios": "ES",
+    "opts": [
+      {
+        "mcc": "214",
+        "mnc": "07",
+        "name": "Movistar",
+        "network": "Movistar"
+      },
+      {
+        "mcc": "214",
+        "mnc": "05",
+        "name": "Movistar",
+        "network": "Movistar"
+      },
+      {
+        "mcc": "214",
+        "mnc": "03",
+        "name": "Orange",
+        "network": "Orange"
+      },
+      {
+        "mcc": "214",
+        "mnc": "09",
+        "name": "Orange",
+        "network": "Orange"
+      },
+      {
+        "mcc": "214",
+        "mnc": "01",
+        "name": "Vodafone",
+        "network": "Vodafone"
+      },
+      {
+        "mcc": "214",
+        "mnc": "06",
+        "name": "Vodafone",
+        "network": "Vodafone"
+      }
+    ]
+  },
+  "HU": {
+    "country": "Hungary",
+    "country_code": "36",
+    "country_name": "匈牙利",
+    "ios": "HU",
+    "opts": [
+      {
+        "mcc": "216",
+        "mnc": "01",
+        "name": "Telenor Hungary",
+        "network": "Telenor Hungary"
+      },
+      {
+        "mcc": "216",
+        "mnc": "71",
+        "name": "UPC Hungary Ltd.",
+        "network": "UPC Hungary Ltd."
+      },
+      {
+        "mcc": "216",
+        "mnc": "70",
+        "name": "Vodafone",
+        "network": "Vodafone"
+      }
+    ]
+  },
+  "IT": {
+    "country": "Italy",
+    "country_code": "39",
+    "country_name": "意大利",
+    "ios": "IT",
+    "opts": [
+      {
+        "mcc": "222",
+        "mnc": "50",
+        "name": "Iliad",
+        "network": "Iliad"
+      },
+      {
+        "mcc": "222",
+        "mnc": "88",
+        "name": "Wind",
+        "network": "Wind"
+      },
+      {
+        "mcc": "222",
+        "mnc": "01",
+        "name": "TIM",
+        "network": "TIM"
+      },
+      {
+        "mcc": "222",
+        "mnc": "10",
+        "name": "Vodafone",
+        "network": "Vodafone"
+      }
+    ]
+  },
+  "CH": {
+    "country": "Switzerland",
+    "country_code": "41",
+    "country_name": "瑞士",
+    "ios": "CH",
+    "opts": [
+      {
+        "mcc": "228",
+        "mnc": "03",
+        "name": "Salt",
+        "network": "Salt"
+      },
+      {
+        "mcc": "228",
+        "mnc": "01",
+        "name": "Swisscom",
+        "network": "Swisscom"
+      },
+      {
+        "mcc": "228",
+        "mnc": "02",
+        "name": "Sunrise",
+        "network": "Sunrise"
+      },
+      {
+        "mcc": "228",
+        "mnc": "12",
+        "name": "Sunrise",
+        "network": "TDC Sunrise"
+      }
+    ]
+  },
+  "AT": {
+    "country": "Austria",
+    "country_code": "43",
+    "country_name": "奥地利",
+    "ios": "AT",
+    "opts": [
+      {
+        "mcc": "232",
+        "mnc": "02",
+        "name": "A1.net",
+        "network": "A1.net"
+      },
+      {
+        "mcc": "232",
+        "mnc": "01",
+        "name": "A1.net",
+        "network": "A1.net"
+      },
+      {
+        "mcc": "232",
+        "mnc": "06",
+        "name": "Orange Austria GmbH",
+        "network": "Orange Austria GmbH"
+      },
+      {
+        "mcc": "232",
+        "mnc": "03",
+        "name": "T-Mobile Austria GmbH",
+        "network": "T-Mobile Austria GmbH"
+      },
+      {
+        "mcc": "232",
+        "mnc": "04",
+        "name": "T-Mobile Austria GmbH",
+        "network": "T-Mobile Austria GmbH"
+      }
+    ]
+  },
+  "UK": {
+    "country": "United Kingdom",
+    "country_code": "44",
+    "country_name": "英国",
+    "ios": "GB",
+    "opts": [
+      {
+        "mcc": "234",
+        "mnc": "78",
+        "name": "Wave Telecom Ltd",
+        "network": "Wave Telecom Ltd"
+      },
+      {
+        "mcc": "234",
+        "mnc": "91",
+        "name": "Vodafone",
+        "network": "Vodafone"
+      },
+      {
+        "mcc": "234",
+        "mnc": "15",
+        "name": "Vodafone",
+        "network": "Vodafone"
+      },
+      {
+        "mcc": "234",
+        "mnc": "23",
+        "name": "Vectofone Mobile Wif",
+        "network": "Vectofone Mobile Wifi"
+      },
+      {
+        "mcc": "234",
+        "mnc": "51",
+        "name": "Jersey Telecom",
+        "network": "Jersey Telecom"
+      },
+      {
+        "mcc": "234",
+        "mnc": "25",
+        "name": "Truphone",
+        "network": "Truphone"
+      },
+      {
+        "mcc": "234",
+        "mnc": "09",
+        "name": "Tismi",
+        "network": "Tismi"
+      },
+      {
+        "mcc": "234",
+        "mnc": "27",
+        "name": "Vodafone",
+        "network": "Vodafone"
+      },
+      {
+        "mcc": "234",
+        "mnc": "32",
+        "name": "T-Mobile",
+        "network": "Everyth. Ev.wh./T-Mobile"
+      },
+      {
+        "mcc": "234",
+        "mnc": "30",
+        "name": "T-Mobile",
+        "network": "Everyth. Ev.wh./T-Mobile"
+      },
+      {
+        "mcc": "234",
+        "mnc": "31",
+        "name": "T-Mobile",
+        "network": "Everyth. Ev.wh./T-Mobile"
+      },
+      {
+        "mcc": "234",
+        "mnc": "37",
+        "name": "Synectiv Ltd.",
+        "network": "Synectiv Ltd."
+      },
+      {
+        "mcc": "234",
+        "mnc": "24",
+        "name": "Stour Marine",
+        "network": "Stour Marine"
+      },
+      {
+        "mcc": "234",
+        "mnc": "57",
+        "name": "Sky UK Limited",
+        "network": "Sky UK Limited"
+      },
+      {
+        "mcc": "234",
+        "mnc": "22",
+        "name": "Routotelecom",
+        "network": "Routotelecom"
+      },
+      {
+        "mcc": "234",
+        "mnc": "12",
+        "name": "Railtrack Plc",
+        "network": "Railtrack Plc"
+      },
+      {
+        "mcc": "234",
+        "mnc": "19",
+        "name": "PMN/Teleware",
+        "network": "PMN/Teleware"
+      },
+      {
+        "mcc": "234",
+        "mnc": "33",
+        "name": "Orange",
+        "network": "Everyth. Ev.wh./Orange"
+      },
+      {
+        "mcc": "234",
+        "mnc": "34",
+        "name": "Orange",
+        "network": "Everyth. Ev.wh./Orange"
+      },
+      {
+        "mcc": "234",
+        "mnc": "16",
+        "name": "Opal Telecom",
+        "network": "Opal Telecom"
+      },
+      {
+        "mcc": "234",
+        "mnc": "08",
+        "name": "OnePhone",
+        "network": "OnePhone"
+      },
+      {
+        "mcc": "234",
+        "mnc": "11",
+        "name": "O2 Ltd.",
+        "network": "O2 Ltd."
+      },
+      {
+        "mcc": "234",
+        "mnc": "02",
+        "name": "O2 Ltd.",
+        "network": "O2 Ltd."
+      },
+      {
+        "mcc": "234",
+        "mnc": "10",
+        "name": "O2 Ltd.",
+        "network": "O2 Ltd."
+      },
+      {
+        "mcc": "234",
+        "mnc": "28",
+        "name": "Marthon Telecom",
+        "network": "Marthon Telecom"
+      },
+      {
+        "mcc": "234",
+        "mnc": "01",
+        "name": "Mapesbury C. Ltd",
+        "network": "Mapesbury C. Ltd"
+      },
+      {
+        "mcc": "234",
+        "mnc": "58",
+        "name": "Manx Telecom",
+        "network": "Manx Telecom"
+      },
+      {
+        "mcc": "234",
+        "mnc": "26",
+        "name": "Lycamobile",
+        "network": "Lycamobile"
+      },
+      {
+        "mcc": "234",
+        "mnc": "35",
+        "name": "JSC Ingenicum",
+        "network": "JSC Ingenicum"
+      },
+      {
+        "mcc": "234",
+        "mnc": "50",
+        "name": "Jersey Telecom",
+        "network": "Jersey Telecom"
+      },
+      {
+        "mcc": "234",
+        "mnc": "75",
+        "name": "Inquam Telecom Ltd",
+        "network": "Inquam Telecom Ltd"
+      },
+      {
+        "mcc": "234",
+        "mnc": "94",
+        "name": "H3G Hutchinson",
+        "network": "H3G Hutchinson"
+      },
+      {
+        "mcc": "234",
+        "mnc": "20",
+        "name": "H3G Hutchinson",
+        "network": "H3G Hutchinson"
+      },
+      {
+        "mcc": "234",
+        "mnc": "14",
+        "name": "HaySystems",
+        "network": "HaySystems"
+      },
+      {
+        "mcc": "234",
+        "mnc": "55",
+        "name": "Guernsey Telecoms",
+        "network": "Guernsey Telecoms"
+      },
+      {
+        "mcc": "234",
+        "mnc": "17",
+        "name": "FlexTel",
+        "network": "FlexTel"
+      },
+      {
+        "mcc": "235",
+        "mnc": "02",
+        "name": "Everyth. Ev.wh.",
+        "network": "Everyth. Ev.wh."
+      },
+      {
+        "mcc": "234",
+        "mnc": "18",
+        "name": "Cloud9/wire9 Tel.",
+        "network": "Cloud9/wire9 Tel."
+      },
+      {
+        "mcc": "234",
+        "mnc": "07",
+        "name": "Cable and",
+        "network": "Cable and"
+      },
+      {
+        "mcc": "234",
+        "mnc": "92",
+        "name": "Cable and",
+        "network": "Cable and"
+      },
+      {
+        "mcc": "234",
+        "mnc": "76",
+        "name": "BT Group",
+        "network": "BT Group"
+      },
+      {
+        "mcc": "234",
+        "mnc": "77",
+        "name": "BT Group",
+        "network": "BT Group"
+      }
+    ]
+  },
+  "DK": {
+    "country": "Denmark",
+    "country_code": "45",
+    "country_name": "丹麦",
+    "ios": "DK",
+    "opts": [
+      {
+        "mcc": "238",
+        "mnc": "09",
+        "name": "SINE",
+        "network": "SINE"
+      },
+      {
+        "mcc": "238",
+        "mnc": "10",
+        "name": "TDC",
+        "network": "TDC"
+      },
+      {
+        "mcc": "238",
+        "mnc": "01",
+        "name": "TDC",
+        "network": "TDC"
+      },
+      {
+        "mcc": "238",
+        "mnc": "77",
+        "name": "Telenor",
+        "network": "Telenor"
+      },
+      {
+        "mcc": "238",
+        "mnc": "02",
+        "name": "Telenor",
+        "network": "Telenor"
+      },
+      {
+        "mcc": "238",
+        "mnc": "20",
+        "name": "Telia",
+        "network": "Telia"
+      }
+    ]
+  },
+  "SE": {
+    "country": "Sweden",
+    "country_code": "46",
+    "country_name": "瑞典",
+    "ios": "SE",
+    "opts": [
+      {
+        "mcc": "240",
+        "mnc": "38",
+        "name": "Voxbone",
+        "network": "Voxbone"
+      },
+      {
+        "mcc": "240",
+        "mnc": "06",
+        "name": "Telenor",
+        "network": "Telenor"
+      },
+      {
+        "mcc": "240",
+        "mnc": "08",
+        "name": "Telenor",
+        "network": "Telenor"
+      },
+      {
+        "mcc": "240",
+        "mnc": "07",
+        "name": "Tele2",
+        "network": "Tele2"
+      }
+    ]
+  },
+  "NO": {
+    "country": "Norway",
+    "country_code": "47",
+    "country_name": "挪威",
+    "ios": "NO",
+    "opts": [
+      {
+        "mcc": "242",
+        "mnc": "14",
+        "name": "ICE",
+        "network": "ICE"
+      },
+      {
+        "mcc": "242",
+        "mnc": "02",
+        "name": "Telia",
+        "network": "Telia"
+      },
+      {
+        "mcc": "242",
+        "mnc": "22",
+        "name": "Telia",
+        "network": "Telia"
+      },
+      {
+        "mcc": "242",
+        "mnc": "12",
+        "name": "Telenor",
+        "network": "Telenor"
+      },
+      {
+        "mcc": "242",
+        "mnc": "01",
+        "name": "Telenor",
+        "network": "Telenor"
+      }
+    ]
+  },
+  "PL": {
+    "country": "Poland",
+    "country_code": "48",
+    "country_name": "波兰",
+    "ios": "PL",
+    "opts": [
+      {
+        "mcc": "260",
+        "mnc": "15",
+        "name": "Aero2",
+        "network": "Aero2"
+      },
+      {
+        "mcc": "260",
+        "mnc": "04",
+        "name": "Aero2",
+        "network": "Aero2"
+      },
+      {
+        "mcc": "260",
+        "mnc": "03",
+        "name": "Orange",
+        "network": "Orange"
+      },
+      {
+        "mcc": "260",
+        "mnc": "06",
+        "name": "Play",
+        "network": "Play"
+      },
+      {
+        "mcc": "260",
+        "mnc": "01",
+        "name": "Plus",
+        "network": "Plus"
+      },
+      {
+        "mcc": "260",
+        "mnc": "02",
+        "name": "T-Mobile",
+        "network": "T-Mobile"
+      }
+    ]
+  },
+  "DE": {
+    "country": "Germany",
+    "country_code": "49",
+    "country_name": "德国",
+    "ios": "DE",
+    "opts": [
+      {
+        "mcc": "262",
+        "mnc": "08",
+        "name": "O2",
+        "network": "O2"
+      },
+      {
+        "mcc": "262",
+        "mnc": "07",
+        "name": "O2",
+        "network": "O2"
+      },
+      {
+        "mcc": "262",
+        "mnc": "06",
+        "name": "Telekom",
+        "network": "Telekom"
+      },
+      {
+        "mcc": "262",
+        "mnc": "01",
+        "name": "Telekom",
+        "network": "Telekom"
+      },
+      {
+        "mcc": "262",
+        "mnc": "02",
+        "name": "Vodafone",
+        "network": "Vodafone"
+      },
+      {
+        "mcc": "262",
+        "mnc": "09",
+        "name": "Vodafone",
+        "network": "Vodafone"
+      }
+    ]
+  },
+  "PE": {
+    "country": "Peru",
+    "country_code": "51",
+    "country_name": "秘鲁",
+    "ios": "PE",
+    "opts": [
+      {
+        "mcc": "716",
+        "mnc": "07",
+        "name": "Entel",
+        "network": "Entel"
+      },
+      {
+        "mcc": "716",
+        "mnc": "10",
+        "name": "Claro",
+        "network": "Entel"
+      },
+      {
+        "mcc": "716",
+        "mnc": "06",
+        "name": "Movistar",
+        "network": "Entel"
+      }
+    ]
+  },
+  "MX": {
+    "country": "Mexico",
+    "country_code": "52",
+    "country_name": "墨西哥",
+    "ios": "MX",
+    "opts": [
+      {
+        "mcc": "334",
+        "mnc": "050",
+        "name": "AT&T",
+        "network": "AT&T"
+      },
+      {
+        "mcc": "334",
+        "mnc": "070",
+        "name": "AT&T",
+        "network": "AT&T"
+      },
+      {
+        "mcc": "334",
+        "mnc": "010",
+        "name": "AT&T Mexico",
+        "network": "AT&T"
+      }
+    ]
+  },
+  "AR": {
+    "country": "Argentina",
+    "country_code": "54",
+    "country_name": "阿根廷",
+    "ios": "AR",
+    "opts": [
+      {
+        "mcc": "722",
+        "mnc": "070",
+        "name": "Movistar",
+        "network": "Movistar"
+      },
+      {
+        "mcc": "722",
+        "mnc": "034",
+        "name": "Personal",
+        "network": "Personal"
+      },
+      {
+        "mcc": "722",
+        "mnc": "341",
+        "name": "Personal",
+        "network": "Personal"
+      },
+      {
+        "mcc": "722",
+        "mnc": "320",
+        "name": "Claro",
+        "network": "Claro"
+      },
+      {
+        "mcc": "722",
+        "mnc": "010",
+        "name": "Movistar",
+        "network": "Movistar"
+      }
+    ]
+  },
+  "BR": {
+    "country": "Brazil",
+    "country_code": "55",
+    "country_name": "巴西",
+    "ios": "BR",
+    "opts": [
+      {
+        "mcc": "724",
+        "mnc": "38",
+        "name": "Claro",
+        "network": "Claro"
+      },
+      {
+        "mcc": "724",
+        "mnc": "05",
+        "name": "Claro",
+        "network": "Clarol"
+      },
+      {
+        "mcc": "724",
+        "mnc": "00",
+        "name": "Nextel",
+        "network": "Nextel"
+      },
+      {
+        "mcc": "724",
+        "mnc": "02",
+        "name": "TIM",
+        "network": "TIM"
+      },
+      {
+        "mcc": "724",
+        "mnc": "04",
+        "name": "TIM",
+        "network": "TIM"
+      },
+      {
+        "mcc": "724",
+        "mnc": "10",
+        "name": "Vivo",
+        "network": "Vivo"
+      },
+      {
+        "mcc": "724",
+        "mnc": "06",
+        "name": "Vivo",
+        "network": "Vivo"
+      }
+    ]
+  },
+  "CL": {
+    "country": "Chile",
+    "country_code": "56",
+    "country_name": "智利",
+    "ios": "CL",
+    "opts": [
+      {
+        "mcc": "730",
+        "mnc": "07",
+        "name": "movistar",
+        "network": "movistar"
+      },
+      {
+        "mcc": "730",
+        "mnc": "03",
+        "name": "Claro Chile S.A.",
+        "network": "Claro Chile S.A."
+      },
+      {
+        "mcc": "730",
+        "mnc": "01",
+        "name": "entel",
+        "network": "entel"
+      },
+      {
+        "mcc": "730",
+        "mnc": "04",
+        "name": "Novator Partners",
+        "network": "Novator Partners"
+      }
+    ]
+  },
+  "CO": {
+    "country": "Colombia",
+    "country_code": "57",
+    "country_name": "哥伦比亚",
+    "ios": "CO",
+    "opts": [
+      {
+        "mcc": "732",
+        "mnc": "130",
+        "name": "Avantel",
+        "network": "Avantel"
+      },
+      {
+        "mcc": "002",
+        "mnc": "020",
+        "name": "Edatel",
+        "network": "Edatel"
+      },
+      {
+        "mcc": "732",
+        "mnc": "099",
+        "name": "Empresas Municipales de Cali",
+        "network": "Empresas Municipales de Cali"
+      },
+      {
+        "mcc": "732",
+        "mnc": "154",
+        "name": "Virgin Mobile",
+        "network": "Virgin Mobile"
+      }
+    ]
+  },
+  "MY": {
+    "country": "Malaysia",
+    "country_code": "60",
+    "country_name": "马来西亚",
+    "ios": "MY",
+    "opts": [
+      {
+        "mcc": "502",
+        "mnc": "19",
+        "name": "CelCom",
+        "network": "CelCom"
+      },
+      {
+        "mcc": "502",
+        "mnc": "13",
+        "name": "CelCom",
+        "network": "CelCom"
+      },
+      {
+        "mcc": "502",
+        "mnc": "17",
+        "name": "Maxis",
+        "network": "Maxis"
+      },
+      {
+        "mcc": "502",
+        "mnc": "12",
+        "name": "Maxis",
+        "network": "Maxis"
+      },
+      {
+        "mcc": "502",
+        "mnc": "150",
+        "name": "Tune Talk",
+        "network": "Tune Talk"
+      }
+    ]
+  },
+  "AU": {
+    "country": "Australia",
+    "country_code": "61",
+    "country_name": "澳大利亚",
+    "ios": "AU",
+    "opts": [
+      {
+        "mcc": "505",
+        "mnc": "02",
+        "name": "Optus",
+        "network": "Singtel"
+      },
+      {
+        "mcc": "505",
+        "mnc": "11",
+        "name": "Telstra",
+        "network": "Telstra"
+      },
+      {
+        "mcc": "505",
+        "mnc": "01",
+        "name": "Telstra",
+        "network": "Telstra Corp. Ltd."
+      },
+      {
+        "mcc": "505",
+        "mnc": "07",
+        "name": "Vodafone",
+        "network": "Vodafone"
+      },
+      {
+        "mcc": "505",
+        "mnc": "03",
+        "name": "Vodafone",
+        "network": "Vodafone"
+      }
+    ]
+  },
+  "ID": {
+    "country": "Indonesia",
+    "country_code": "62",
+    "country_name": "印度尼西亚",
+    "ios": "ID",
+    "opts": [
+      {
+        "mcc": "510",
+        "mnc": "11",
+        "name": "XL",
+        "network": "XL"
+      },
+      {
+        "mcc": "510",
+        "mnc": "01",
+        "name": "Indosat",
+        "network": "Indosat"
+      },
+      {
+        "mcc": "510",
+        "mnc": "09",
+        "name": "Smartfren",
+        "network": "Smartfren"
+      },
+      {
+        "mcc": "510",
+        "mnc": "10",
+        "name": "Telkomsel",
+        "network": "Telkomsel"
+      }
+    ]
+  },
+  "PH": {
+    "country": "Philippines",
+    "country_code": "63",
+    "country_name": "菲律宾",
+    "ios": "PH",
+    "opts": [
+      {
+        "mcc": "515",
+        "mnc": "02",
+        "name": "Globe",
+        "network": "Globe"
+      },
+      {
+        "mcc": "515",
+        "mnc": "01",
+        "name": "Globe",
+        "network": "Globe"
+      },
+      {
+        "mcc": "515",
+        "mnc": "03",
+        "name": "Smart",
+        "network": "Smart"
+      },
+      {
+        "mcc": "515",
+        "mnc": "05",
+        "name": "Sun Cellular",
+        "network": "Sun Cellular"
+      }
+    ]
+  },
+  "NZ": {
+    "country": "New Zealand",
+    "country_code": "64",
+    "country_name": "新西兰",
+    "ios": "NZ",
+    "opts": [
+      {
+        "mcc": "530",
+        "mnc": "05",
+        "name": "Spark",
+        "network": "Spark"
+      },
+      {
+        "mcc": "530",
+        "mnc": "02",
+        "name": "Telecom",
+        "network": "Telecom"
+      },
+      {
+        "mcc": "530",
+        "mnc": "04",
+        "name": "Vodafone",
+        "network": "Vodafone"
+      },
+      {
+        "mcc": "530",
+        "mnc": "01",
+        "name": "Vodafone",
+        "network": "Vodafone"
+      },
+      {
+        "mcc": "530",
+        "mnc": "03",
+        "name": "Woosh",
+        "network": "Woosh"
+      }
+    ]
+  },
+  "SG": {
+    "country": "Singapore",
+    "country_code": "65",
+    "country_name": "新加坡",
+    "ios": "SG",
+    "opts": [
+      {
+        "mcc": "525",
+        "mnc": "01",
+        "name": "SingTel",
+        "network": "SingTel"
+      },
+      {
+        "mcc": "525",
+        "mnc": "07",
+        "name": "SingTel",
+        "network": "SingTel"
+      },
+      {
+        "mcc": "525",
+        "mnc": "03",
+        "name": "M1",
+        "network": "M1"
+      },
+      {
+        "mcc": "525",
+        "mnc": "05",
+        "name": "Starhub",
+        "network": "Starhub"
+      },
+      {
+        "mcc": "525",
+        "mnc": "06",
+        "name": "Starhub",
+        "network": "Starhub"
+      }
+    ]
+  },
+  "TH": {
+    "country": "Thailand",
+    "country_code": "66",
+    "country_name": "泰国",
+    "ios": "TH",
+    "opts": [
+      {
+        "mcc": "520",
+        "mnc": "03",
+        "name": "AIS",
+        "network": "AIS"
+      },
+      {
+        "mcc": "520",
+        "mnc": "01",
+        "name": "AIS",
+        "network": "AIS"
+      },
+      {
+        "mcc": "520",
+        "mnc": "05",
+        "name": "DTAC",
+        "network": "DTAC"
+      },
+      {
+        "mcc": "520",
+        "mnc": "18",
+        "name": "DTAC",
+        "network": "DTAC"
+      },
+      {
+        "mcc": "520",
+        "mnc": "04",
+        "name": "Orange",
+        "network": "Orange"
+      },
+      {
+        "mcc": "520",
+        "mnc": "99",
+        "name": "Orange",
+        "network": "Orange"
+      }
+    ]
+  },
+  "JP": {
+    "country": "Japan",
+    "country_code": "81",
+    "country_name": "日本",
+    "ios": "JP",
+    "opts": [
+      {
+        "mcc": "440",
+        "mnc": "51",
+        "name": "KDDI",
+        "network": "KDDI"
+      },
+      {
+        "mcc": "440",
+        "mnc": "52",
+        "name": "KDDI",
+        "network": "KDDI"
+      },
+      {
+        "mcc": "440",
+        "mnc": "53",
+        "name": "KDDI",
+        "network": "KDDI"
+      },
+      {
+        "mcc": "440",
+        "mnc": "10",
+        "name": "NTT",
+        "network": "NTT"
+      },
+      {
+        "mcc": "440",
+        "mnc": "20",
+        "name": "SoftBank",
+        "network": "SoftBank"
+      },
+      {
+        "mcc": "440",
+        "mnc": "21",
+        "name": "SoftBank",
+        "network": "SoftBank"
+      }
+    ]
+  },
+  "KR": {
+    "country": "South Korea",
+    "country_code": "82",
+    "country_name": "韩国",
+    "ios": "KR",
+    "opts": [
+      {
+        "mcc": "450",
+        "mnc": "04",
+        "name": "KT",
+        "network": "KT"
+      },
+      {
+        "mcc": "450",
+        "mnc": "05",
+        "name": "SK",
+        "network": "SK"
+      },
+      {
+        "mcc": "450",
+        "mnc": "04",
+        "name": "KT",
+        "network": "KT"
+      },
+      {
+        "mcc": "450",
+        "mnc": "02",
+        "name": "KT",
+        "network": "KT"
+      },
+      {
+        "mcc": "450",
+        "mnc": "03",
+        "name": "SK",
+        "network": "SK"
+      },
+      {
+        "mcc": "450",
+        "mnc": "08",
+        "name": "KT",
+        "network": "KT"
+      }
+    ]
+  },
+  "VN": {
+    "country": "Viet Nam",
+    "country_code": "84",
+    "country_name": "越南",
+    "ios": "VN",
+    "opts": [
+      {
+        "mcc": "452",
+        "mnc": "07",
+        "name": "Beeline",
+        "network": "Beeline"
+      },
+      {
+        "mcc": "452",
+        "mnc": "01",
+        "name": "Mobifone",
+        "network": "Mobifone"
+      },
+      {
+        "mcc": "452",
+        "mnc": "05",
+        "name": "VietnaMobile",
+        "network": "VietnaMobile"
+      },
+      {
+        "mcc": "452",
+        "mnc": "08",
+        "name": "Viettel Mobile",
+        "network": "Viettel Mobile"
+      },
+      {
+        "mcc": "452",
+        "mnc": "06",
+        "name": "Viettel Mobile",
+        "network": "Viettel Mobile"
+      },
+      {
+        "mcc": "452",
+        "mnc": "04",
+        "name": "Viettel Mobile",
+        "network": "Viettel Mobile"
+      },
+      {
+        "mcc": "452",
+        "mnc": "02",
+        "name": "Vinaphone",
+        "network": "Vinaphone"
+      }
+    ]
+  },
+  "CN": {
+    "country": "China",
+    "country_code": "86",
+    "country_name": "中国",
+    "ios": "CN",
+    "opts": [
+      {
+        "mcc": "460",
+        "mnc": "00",
+        "name": "China Mobile",
+        "network": "China Mobile"
+      },
+      {
+        "mcc": "460",
+        "mnc": "07",
+        "name": "China Mobile",
+        "network": "China Mobile"
+      },
+      {
+        "mcc": "460",
+        "mnc": "05",
+        "name": "China Telecom",
+        "network": "China Telecom"
+      },
+      {
+        "mcc": "460",
+        "mnc": "03",
+        "name": "China Telecom",
+        "network": "China Telecom"
+      },
+      {
+        "mcc": "460",
+        "mnc": "06",
+        "name": "China Unicom",
+        "network": "China Unicom"
+      },
+      {
+        "mcc": "460",
+        "mnc": "01",
+        "name": "China Unicom",
+        "network": "China Unicom"
+      }
+    ]
+  },
+  "TR": {
+    "country": "Turkey",
+    "country_code": "90",
+    "country_name": "土耳其",
+    "ios": "TR",
+    "opts": [
+      {
+        "mcc": "286",
+        "mnc": "02",
+        "name": "Vodafone",
+        "network": "Vodafone"
+      },
+      {
+        "mcc": "286",
+        "mnc": "04",
+        "name": "Aycell",
+        "network": "Aycell"
+      },
+      {
+        "mcc": "286",
+        "mnc": "01",
+        "name": "Turkcell",
+        "network": "Turkcell"
+      }
+    ]
+  },
+  "IN": {
+    "country": "India",
+    "country_code": "91",
+    "country_name": "印度",
+    "ios": "IN",
+    "opts": [
+      {
+        "mcc": "404",
+        "mnc": "42",
+        "name": "Aircel",
+        "network": "Aircel"
+      },
+      {
+        "mcc": "404",
+        "mnc": "37",
+        "name": "Aircel",
+        "network": "Aircel"
+      },
+      {
+        "mcc": "404",
+        "mnc": "02",
+        "name": "AirTel",
+        "network": "AirTel"
+      },
+      {
+        "mcc": "404",
+        "mnc": "16",
+        "name": "AirTel",
+        "network": "AirTel"
+      },
+      {
+        "mcc": "404",
+        "mnc": "38",
+        "name": "BSNL",
+        "network": "BSNL"
+      }
+    ]
+  },
+  "PK": {
+    "country": "Pakistan",
+    "country_code": "92",
+    "country_name": "巴基斯坦",
+    "ios": "PK",
+    "opts": [
+      {
+        "mcc": "410",
+        "mnc": "03",
+        "name": "Ufone",
+        "network": "Ufone"
+      },
+      {
+        "mcc": "410",
+        "mnc": "04",
+        "name": "Zong",
+        "network": "Zong"
+      },
+      {
+        "mcc": "410",
+        "mnc": "05",
+        "name": "SCO Mobile",
+        "network": "SCO Mobile"
+      }
+    ]
+  },
+  "AF": {
+    "country": "Afghanistan",
+    "country_code": "93",
+    "country_name": "阿富汗",
+    "ios": "AF",
+    "opts": [
+      {
+        "mcc": "412",
+        "mnc": "88",
+        "name": "Afghan Telecom",
+        "network": "Afghan Telecom"
+      },
+      {
+        "mcc": "412",
+        "mnc": "88",
+        "name": "Afghan Telecom",
+        "network": "Afghan Telecom"
+      },
+      {
+        "mcc": "412",
+        "mnc": "01",
+        "name": "AWCC",
+        "network": "AWCC"
+      },
+      {
+        "mcc": "412",
+        "mnc": "40",
+        "name": "MTN",
+        "network": "MTN"
+      },
+      {
+        "mcc": "412",
+        "mnc": "50",
+        "name": "Etisalat",
+        "network": "Etisalat"
+      }
+    ]
+  },
+  "IR": {
+    "country": "Iran",
+    "country_code": "98",
+    "country_name": "伊朗",
+    "ios": "IR",
+    "opts": [
+      {
+        "mcc": "432",
+        "mnc": "02",
+        "name": "Azartel",
+        "network": "Azartel"
+      },
+      {
+        "mcc": "432",
+        "mnc": "93",
+        "name": "Iraphone",
+        "network": "Iraphone"
+      },
+      {
+        "mcc": "432",
+        "mnc": "35",
+        "name": "MTN Irancell",
+        "network": "MTN Irancell"
+      },
+      {
+        "mcc": "432",
+        "mnc": "10",
+        "name": "Samantel",
+        "network": "Samantel"
+      },
+      {
+        "mcc": "432",
+        "mnc": "08",
+        "name": "Shatel Mobile",
+        "network": "Shatel Mobile"
+      }
+    ]
+  },
+  "DZ": {
+    "country": "Algeria",
+    "country_code": "213",
+    "country_name": "阿尔及利亚",
+    "ios": "DZ",
+    "opts": [
+      {
+        "mcc": "603",
+        "mnc": "01",
+        "name": "Mobilis",
+        "network": "Mobilis"
+      }
+    ]
+  },
+  "BJ": {
+    "country": "Benin",
+    "country_code": "229",
+    "country_name": "贝宁",
+    "ios": "BJ",
+    "opts": [
+      {
+        "mcc": "616",
+        "mnc": "04",
+        "name": "Bell Benin Communications",
+        "network": "Bell Benin Communications"
+      },
+      {
+        "mcc": "616",
+        "mnc": "05",
+        "name": "Glo Communication Benin",
+        "network": "Glo Communication Benin"
+      },
+      {
+        "mcc": "616",
+        "mnc": "02",
+        "name": "Moov",
+        "network": "Moov"
+      }
+    ]
+  },
+  "NG": {
+    "country": "Nigeria",
+    "country_code": "234",
+    "country_name": "尼日利亚",
+    "ios": "NG",
+    "opts": [
+      {
+        "mcc": "621",
+        "mnc": "01",
+        "name": "MTN",
+        "network": "MTN"
+      },
+      {
+        "mcc": "621",
+        "mnc": "20",
+        "name": "Globacom",
+        "network": "Globacom"
+      },
+      {
+        "mcc": "621",
+        "mnc": "05",
+        "name": "9mobile",
+        "network": "05"
+      },
+      {
+        "mcc": "621",
+        "mnc": "40",
+        "name": "Airtel",
+        "network": "05"
+      }
+    ]
+  },
+  "ZM": {
+    "country": "Zambia",
+    "country_code": "260",
+    "country_name": "赞比亚",
+    "ios": "ZM",
+    "opts": [
+      {
+        "mcc": "645",
+        "mnc": "01",
+        "name": "Airtel",
+        "network": "Airtel"
+      },
+      {
+        "mcc": "645",
+        "mnc": "02",
+        "name": "MTN",
+        "network": "MTN"
+      },
+      {
+        "mcc": "645",
+        "mnc": "03",
+        "name": "ZAMTEL",
+        "network": "ZAMTEL"
+      }
+    ]
+  },
+  "KM": {
+    "country": "Comoros",
+    "country_code": "269",
+    "country_name": "科摩罗",
+    "ios": "KM",
+    "opts": [
+      {
+        "mcc": "654",
+        "mnc": "01",
+        "name": "HURI",
+        "network": "HURI - SNPT"
+      },
+      {
+        "mcc": "654",
+        "mnc": "02",
+        "name": "TELCO SA",
+        "network": "TELCO SA"
+      }
+    ]
+  },
+  "PT": {
+    "country": "Portugal",
+    "country_code": "351",
+    "country_name": "葡萄牙",
+    "ios": "PT",
+    "opts": [
+      {
+        "mcc": "268",
+        "mnc": "01",
+        "name": "Vodafone",
+        "network": "Vodafone"
+      },
+      {
+        "mcc": "268",
+        "mnc": "91",
+        "name": "Vodafone",
+        "network": "Vodafone"
+      },
+      {
+        "mcc": "268",
+        "mnc": "06",
+        "name": "MEO",
+        "network": "MEO"
+      },
+      {
+        "mcc": "268",
+        "mnc": "02",
+        "name": "MEO",
+        "network": "MEO"
+      }
+    ]
+  },
+  "IE": {
+    "country": "Ireland",
+    "country_code": "353",
+    "country_name": "爱尔兰",
+    "ios": "IE",
+    "opts": [
+      {
+        "mcc": "272",
+        "mnc": "03",
+        "name": "Eir",
+        "network": "Eir"
+      },
+      {
+        "mcc": "272",
+        "mnc": "13",
+        "name": "Lycamobile",
+        "network": "Lycamobile"
+      },
+      {
+        "mcc": "272",
+        "mnc": "01",
+        "name": "Vodafone",
+        "network": "Vodafone"
+      }
+    ]
+  },
+  "IS": {
+    "country": "Iceland",
+    "country_code": "354",
+    "country_name": "冰岛",
+    "ios": "IS",
+    "opts": [
+      {
+        "mcc": "274",
+        "mnc": "11",
+        "name": "Nova",
+        "network": "Nova"
+      },
+      {
+        "mcc": "274",
+        "mnc": "07",
+        "name": "IceCell",
+        "network": "IceCell"
+      },
+      {
+        "mcc": "274",
+        "mnc": "02",
+        "name": "Vodafone",
+        "network": "Vodafone"
+      }
+    ]
+  },
+  "AL": {
+    "country": "Albania",
+    "country_code": "355",
+    "country_name": "阿尔巴尼亚",
+    "ios": "AL",
+    "opts": [
+      {
+        "mcc": "276",
+        "mnc": "04",
+        "name": "Plus Communication",
+        "network": "Plus Communication"
+      },
+      {
+        "mcc": "276",
+        "mnc": "02",
+        "name": "Vodafone",
+        "network": "Vodafone"
+      }
+    ]
+  },
+  "FI": {
+    "country": "Finland",
+    "country_code": "358",
+    "country_name": "芬兰",
+    "ios": "FI",
+    "opts": [
+      {
+        "mcc": "244",
+        "mnc": "03",
+        "name": "DNA",
+        "network": "DNA"
+      },
+      {
+        "mcc": "244",
+        "mnc": "04",
+        "name": "DNA",
+        "network": "DNA"
+      },
+      {
+        "mcc": "244",
+        "mnc": "06",
+        "name": "Elisa",
+        "network": "Elisa"
+      },
+      {
+        "mcc": "244",
+        "mnc": "05",
+        "name": "Elisa",
+        "network": "Elisa"
+      }
+    ]
+  },
+  "AM": {
+    "country": "Armenia",
+    "country_code": "374",
+    "country_name": "亚美尼亚",
+    "ios": "AM",
+    "opts": [
+      {
+        "mcc": "283",
+        "mnc": "04",
+        "name": "Karabakh Telecom",
+        "network": "Karabakh Telecom"
+      },
+      {
+        "mcc": "283",
+        "mnc": "10",
+        "name": "Ucom LLC",
+        "network": "Ucom LLC"
+      }
+    ]
+  },
+  "BY": {
+    "country": "Belarus",
+    "country_code": "375",
+    "country_name": "白俄罗斯",
+    "ios": "BY",
+    "opts": [
+      {
+        "mcc": "257",
+        "mnc": "03",
+        "name": "BelCel JV",
+        "network": "BelCel JV"
+      },
+      {
+        "mcc": "257",
+        "mnc": "04",
+        "name": "Belarusian",
+        "network": "Belarusian"
+      },
+      {
+        "mcc": "257",
+        "mnc": "01",
+        "name": "A1 Belarus",
+        "network": "A1 Belarus"
+      },
+      {
+        "mcc": "257",
+        "mnc": "02",
+        "name": "MTS",
+        "network": "MTS"
+      }
+    ]
+  },
+  "UA": {
+    "country": "Ukraine",
+    "country_code": "380",
+    "country_name": "乌克兰",
+    "ios": "UA",
+    "opts": [
+      {
+        "mcc": "255",
+        "mnc": "01",
+        "name": "Vodafone",
+        "network": "Vodafone"
+      },
+      {
+        "mcc": "255",
+        "mnc": "02",
+        "name": "Kyivstar",
+        "network": "Kyivstar"
+      },
+      {
+        "mcc": "255",
+        "mnc": "03",
+        "name": "Kyivstar",
+        "network": "Kyivstar"
+      },
+      {
+        "mcc": "255",
+        "mnc": "04",
+        "name": "IT",
+        "network": "IT"
+      },
+      {
+        "mcc": "255",
+        "mnc": "06",
+        "name": "lifecell",
+        "network": "lifecell"
+      }
+    ]
+  },
+  "CZ": {
+    "country": "Czech Republic",
+    "country_code": "420",
+    "country_name": "捷克共和国",
+    "ios": "CZ",
+    "opts": [
+      {
+        "mcc": "230",
+        "mnc": "06",
+        "name": "Nordic",
+        "network": "Nordic"
+      },
+      {
+        "mcc": "230",
+        "mnc": "02",
+        "name": "O2",
+        "network": "O2"
+      },
+      {
+        "mcc": "230",
+        "mnc": "03",
+        "name": "Vodafone",
+        "network": "Vodafone"
+      },
+      {
+        "mcc": "230",
+        "mnc": "99",
+        "name": "Vodafone",
+        "network": "Vodafone"
+      }
+    ]
+  },
+  "BZ": {
+    "country": "Belize",
+    "country_code": "501",
+    "country_name": "伯利兹",
+    "ios": "BZ",
+    "opts": [
+      {
+        "mcc": "702",
+        "mnc": "67",
+        "name": "DigiCell",
+        "network": "DigiCell"
+      },
+      {
+        "mcc": "702",
+        "mnc": "68",
+        "name": "INTELCO",
+        "network": "INTELCO"
+      }
+    ]
+  },
+  "HK": {
+    "country": "HongKong",
+    "country_code": "852",
+    "country_name": "香港",
+    "ios": "HK",
+    "opts": [
+      {
+        "mcc": "454",
+        "mnc": "28",
+        "name": "China Mobile",
+        "network": "China Mobile"
+      },
+      {
+        "mcc": "454",
+        "mnc": "13",
+        "name": "China Mobile",
+        "network": "China Mobile"
+      },
+      {
+        "mcc": "454",
+        "mnc": "18",
+        "name": "CSL Ltd.",
+        "network": "CSL Ltd."
+      },
+      {
+        "mcc": "454",
+        "mnc": "02",
+        "name": "CSL Ltd.",
+        "network": "CSL Ltd."
+      },
+      {
+        "mcc": "454",
+        "mnc": "04",
+        "name": "H3G/Hutchinson",
+        "network": "H3G/Hutchinson"
+      },
+      {
+        "mcc": "454",
+        "mnc": "05",
+        "name": "H3G/Hutchinson",
+        "network": "H3G/Hutchinson"
+      },
+      {
+        "mcc": "454",
+        "mnc": "20",
+        "name": "HKT/PCCW",
+        "network": "HKT/PCCW"
+      },
+      {
+        "mcc": "454",
+        "mnc": "17",
+        "name": "SmarTone",
+        "network": "SmarTone"
+      },
+      {
+        "mcc": "454",
+        "mnc": "15",
+        "name": "SmarTone",
+        "network": "SmarTone"
+      }
+    ]
+  },
+  "MO": {
+    "country": "Macao",
+    "country_code": "853",
+    "country_name": "澳门",
+    "ios": "MO",
+    "opts": [
+      {
+        "mcc": "455",
+        "mnc": "01",
+        "name": "CTM",
+        "network": "CTM"
+      },
+      {
+        "mcc": "455",
+        "mnc": "04",
+        "name": "CTM",
+        "network": "CTM"
+      },
+      {
+        "mcc": "455",
+        "mnc": "05",
+        "name": "Hutchison Telephone Co. Ltd",
+        "network": "Hutchison Telephone Co. Ltd"
+      },
+      {
+        "mcc": "455",
+        "mnc": "03",
+        "name": "Hutchison Telephone Co. Ltd",
+        "network": "Hutchison Telephone Co. Ltd"
+      },
+      {
+        "mcc": "455",
+        "mnc": "06",
+        "name": "Smartone",
+        "network": "Smartone"
+      },
+      {
+        "mcc": "455",
+        "mnc": "00",
+        "name": "Smartone",
+        "network": "Smartone"
+      }
+    ]
+  },
+  "KH": {
+    "country": "Cambodia",
+    "country_code": "855",
+    "country_name": "柬埔寨",
+    "ios": "KH",
+    "opts": [
+      {
+        "mcc": "456",
+        "mnc": "02",
+        "name": "Smart",
+        "network": "Smart"
+      },
+      {
+        "mcc": "456",
+        "mnc": "05",
+        "name": "Smart",
+        "network": "Smart"
+      },
+      {
+        "mcc": "456",
+        "mnc": "01",
+        "name": "Cellcard",
+        "network": "Cellcard"
+      },
+      {
+        "mcc": "456",
+        "mnc": "08",
+        "name": "Metfone",
+        "network": "Metfone"
+      }
+    ]
+  },
+  "LA": {
+    "country": "Laos",
+    "country_code": "856",
+    "country_name": "老挝",
+    "ios": "LA",
+    "opts": [
+      {
+        "mcc": "457",
+        "mnc": "01",
+        "name": "LaoTel",
+        "network": "LaoTel"
+      },
+      {
+        "mcc": "457",
+        "mnc": "03",
+        "name": "Unitel",
+        "network": "Unitel"
+      },
+      {
+        "mcc": "457",
+        "mnc": "02",
+        "name": "ETL",
+        "network": "ETL"
+      }
+    ]
+  },
+  "BD": {
+    "country": "Bangladesh",
+    "country_code": "880",
+    "country_name": "孟加拉国",
+    "ios": "BD",
+    "opts": [
+      {
+        "mcc": "470",
+        "mnc": "03",
+        "name": "Banglalink",
+        "network": "Banglalink"
+      },
+      {
+        "mcc": "470",
+        "mnc": "10",
+        "name": "Banglalion",
+        "network": "Banglalion"
+      },
+      {
+        "mcc": "470",
+        "mnc": "01",
+        "name": "GrameenPhone",
+        "network": "GrameenPhone"
+      },
+      {
+        "mcc": "470",
+        "mnc": "04",
+        "name": "TeleTalk",
+        "network": "TeleTalk"
+      }
+    ]
+  },
+  "TW": {
+    "country": "Taiwan",
+    "country_code": "886",
+    "country_name": "台湾",
+    "ios": "TW",
+    "opts": [
+      {
+        "mcc": "466",
+        "mnc": "05",
+        "name": "APTG",
+        "network": "APTG"
+      },
+      {
+        "mcc": "466",
+        "mnc": "89",
+        "name": "Taiwan Star Telecom",
+        "network": "Taiwan Star Telecom"
+      },
+      {
+        "mcc": "466",
+        "mnc": "90",
+        "name": "Taiwan Star Telecom",
+        "network": "Taiwan Star Telecom"
+      },
+      {
+        "mcc": "466",
+        "mnc": "03",
+        "name": "Far EasTone",
+        "network": "Far EasTone"
+      },
+      {
+        "mcc": "466",
+        "mnc": "01",
+        "name": "Far EasTone",
+        "network": "Far EasTone"
+      }
+    ]
+  },
+  "KE": {
+    "country": "Kenya",
+    "country_code": "900",
+    "country_name": "肯尼亚",
+    "ios": "KE",
+    "opts": [
+      {
+        "mcc": "639",
+        "mnc": "02",
+        "name": "Safaricom",
+        "network": "Safaricom"
+      },
+      {
+        "mcc": "639",
+        "mnc": "03",
+        "name": "Airtel",
+        "network": "Safaricom"
+      },
+      {
+        "mcc": "639",
+        "mnc": "05",
+        "name": "yu",
+        "network": "Econet Wireless "
+      },
+      {
+        "mcc": "639",
+        "mnc": "07",
+        "name": "Orange Kenya",
+        "network": "Telkom Kenya"
+      }
+    ]
+  },
+  "kw": {
+    "country": "Kuwait",
+    "country_code": "965",
+    "country_name": "科威特",
+    "ios": "kw",
+    "opts": [
+      {
+        "mcc": "419",
+        "mnc": "03",
+        "name": "Ooredoo",
+        "network": "Ooredoo"
+      },
+      {
+        "mcc": "419",
+        "mnc": "999",
+        "name": "Fix Line",
+        "network": "Fix Line"
+      }
+    ]
+  },
+  "SA": {
+    "country": "Saudi Arabia",
+    "country_code": "966",
+    "country_name": "沙特阿拉伯",
+    "ios": "SA",
+    "opts": [
+      {
+        "mcc": "420",
+        "mnc": "06",
+        "name": "Lebara Mobile",
+        "network": "Lebara Mobile"
+      },
+      {
+        "mcc": "420",
+        "mnc": "03",
+        "name": "Mobily",
+        "network": "Mobily"
+      },
+      {
+        "mcc": "420",
+        "mnc": "04",
+        "name": "Zain SA",
+        "network": "Zain SA"
+      }
+    ]
+  },
+  "AE": {
+    "country": "United Arab Emirates",
+    "country_code": "971",
+    "country_name": "阿拉伯联合酋长国",
+    "ios": "AE",
+    "opts": [
+      {
+        "mcc": "424",
+        "mnc": "03",
+        "name": "DU",
+        "network": "DU"
+      },
+      {
+        "mcc": "424",
+        "mnc": "02",
+        "name": "Etisalat",
+        "network": "Etisalat"
+      }
+    ]
+  },
+  "IL": {
+    "country": "Israel",
+    "country_code": "972",
+    "country_name": "以色列",
+    "ios": "IL",
+    "opts": [
+      {
+        "mcc": "425",
+        "mnc": "08",
+        "name": "Golan Telecom",
+        "network": "Golan Telecom"
+      },
+      {
+        "mcc": "425",
+        "mnc": "07",
+        "name": "Hot Mobile",
+        "network": "Hot Mobile"
+      },
+      {
+        "mcc": "425",
+        "mnc": "01",
+        "name": "Partner",
+        "network": "Partner"
+      },
+      {
+        "mcc": "425",
+        "mnc": "03",
+        "name": "Pelephone",
+        "network": "Pelephone"
+      },
+      {
+        "mcc": "425",
+        "mnc": "07",
+        "name": "Rami Levy",
+        "network": "Rami Levy"
+      }
+    ]
+  },
+  "BH": {
+    "country": "Bahrain",
+    "country_code": "973",
+    "country_name": "巴林",
+    "ios": "BH",
+    "opts": [
+      {
+        "mcc": "426",
+        "mnc": "02",
+        "name": "Zain BH",
+        "network": "Zain BH"
+      },
+      {
+        "mcc": "426",
+        "mnc": "04",
+        "name": "STC",
+        "network": "STC"
+      }
+    ]
+  },
+  "QA": {
+    "country": "Qatar",
+    "country_code": "974",
+    "country_name": "卡塔尔",
+    "ios": "QA",
+    "opts": [
+      {
+        "mcc": "427",
+        "mnc": "02",
+        "name": "Vodafone",
+        "network": "Vodafone"
+      },
+      {
+        "mcc": "427",
+        "mnc": "05",
+        "name": "Ministry of Interior",
+        "network": "Ministry of Interior"
+      },
+      {
+        "mcc": "427",
+        "mnc": "01",
+        "name": "Ooredoo",
+        "network": "Ooredoo"
+      }
+    ]
+  },
+  "AZ": {
+    "country": "Azerbaijan",
+    "country_code": "994",
+    "country_name": "阿塞拜疆",
+    "ios": "AZ",
+    "opts": [
+      {
+        "mcc": "400",
+        "mnc": "01",
+        "name": "Azercell",
+        "network": "Azercell"
+      },
+      {
+        "mcc": "400",
+        "mnc": "06",
+        "name": "Nakhtel LLC",
+        "network": "Nakhtel LLC"
+      }
+    ]
+  },
+  "KZ": {
+    "country": "Kazakhstan",
+    "country_code": "997",
+    "country_name": "哈萨克斯坦",
+    "ios": "KZ",
+    "opts": [
+      {
+        "mcc": "401",
+        "mnc": "01",
+        "name": "Beeline",
+        "network": "Beeline"
+      },
+      {
+        "mcc": "401",
+        "mnc": "07",
+        "name": "Altel",
+        "network": "Altel"
+      },
+      {
+        "mcc": "401",
+        "mnc": "02",
+        "name": "Kcell",
+        "network": "Kcell"
+      }
+    ]
+  },
+  "UZ": {
+    "country": "Uzbekistan",
+    "country_code": "998",
+    "country_name": "乌兹别克斯坦",
+    "ios": "UZ",
+    "opts": [
+      {
+        "mcc": "434",
+        "mnc": "01",
+        "name": "Buztel ",
+        "network": "Buztel "
+      },
+      {
+        "mcc": "434",
+        "mnc": "02",
+        "name": "Uzmacom ",
+        "network": "Uzmacom "
+      },
+      {
+        "mcc": "434",
+        "mnc": "04",
+        "name": "Unitel LLC",
+        "network": "Unitel LLC"
+      },
+      {
+        "mcc": "434",
+        "mnc": "05",
+        "name": "Coscom",
+        "network": "Coscom"
+      }
+    ]
+  },
+  "BB": {
+    "country": "Barbados",
+    "country_code": "1246",
+    "country_name": "巴巴多斯",
+    "ios": "BB",
+    "opts": [
+      {
+        "mcc": "342",
+        "mnc": "800",
+        "name": "Ozone",
+        "network": "Ozone"
+      },
+      {
+        "mcc": "342",
+        "mnc": "750",
+        "name": "Digicel",
+        "network": "Digicel"
+      }
+    ]
+  },
+  "AG": {
+    "country": "Antigua and Barbuda",
+    "country_code": "1268",
+    "country_name": "安提瓜和巴布达",
+    "ios": "AG",
+    "opts": [
+      {
+        "mcc": "344",
+        "mnc": "030",
+        "name": "Antigua Public Utilities Authority",
+        "network": "APUA PCS"
+      },
+      {
+        "mcc": "344",
+        "mnc": "930",
+        "name": "AT&T Wireless",
+        "network": "AT&T Wireless"
+      }
+    ]
+  }
+}

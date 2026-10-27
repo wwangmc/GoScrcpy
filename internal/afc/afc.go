@@ -20,4 +20,5 @@ const (
 	fileOpenResult        opcode = 0x0000000E
 	fileRead              opcode = 0x0000000F
 	removePathAndContents opcode = 0x00000022
+	makeLink              opcode = 0x0000001C
 )

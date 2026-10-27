@@ -9,6 +9,7 @@ export namespace device {
 	    platform: string;
 	    error?: string;
 	    codec: string;
+	    videoModes?: string[];
 	    controls?: string[];
 	    settings?: string[];
 	
@@ -26,8 +27,36 @@ export namespace device {
 	        this.platform = source["platform"];
 	        this.error = source["error"];
 	        this.codec = source["codec"];
+	        this.videoModes = source["videoModes"];
 	        this.controls = source["controls"];
 	        this.settings = source["settings"];
+	    }
+	}
+
+}
+
+export namespace iossettings {
+
+	export class Choice {
+	    region: string;
+	    name: string;
+	    locale: string;
+	    language: string;
+	    timeZone: string;
+	    carrierCount: number;
+
+	    static createFrom(source: any = {}) {
+	        return new Choice(source);
+	    }
+
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.region = source["region"];
+	        this.name = source["name"];
+	        this.locale = source["locale"];
+	        this.language = source["language"];
+	        this.timeZone = source["timeZone"];
+	        this.carrierCount = source["carrierCount"];
 	    }
 	}
 
@@ -113,6 +142,38 @@ export namespace main {
 	        this.error = source["error"];
 	    }
 	}
+	export class IOSSettingsInfo {
+	    choices: iossettings.Choice[];
+	    region: string;
+
+	    static createFrom(source: any = {}) {
+	        return new IOSSettingsInfo(source);
+	    }
+
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.choices = this.convertValues(source["choices"], iossettings.Choice);
+	        this.region = source["region"];
+	    }
+
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice && a.map) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
+	}
 	export class LaunchOptions {
 	    lastDevice: string;
 	    fileSerial: string;
@@ -155,6 +216,7 @@ export namespace main {
 	    url: string;
 	    metadata: scrcpy.Metadata;
 	    codec: string;
+	    videoModes: string[];
 	    controls: string[];
 	    settings: string[];
 	    pointerIntervalMS: number;
@@ -168,6 +230,7 @@ export namespace main {
 	        this.url = source["url"];
 	        this.metadata = this.convertValues(source["metadata"], scrcpy.Metadata);
 	        this.codec = source["codec"];
+	        this.videoModes = source["videoModes"];
 	        this.controls = source["controls"];
 	        this.settings = source["settings"];
 	        this.pointerIntervalMS = source["pointerIntervalMS"];
@@ -191,7 +254,22 @@ export namespace main {
 		    return a;
 		}
 	}
+	export class ShellLaunch {
+	    missingOpenSSH: boolean;
+	    warning?: string;
+
+	    static createFrom(source: any = {}) {
+	        return new ShellLaunch(source);
+	    }
+
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.missingOpenSSH = source["missingOpenSSH"];
+	        this.warning = source["warning"];
+	    }
+	}
 	export class SmokeReport {
+	    codec: string;
 	    frames: number;
 	    width: number;
 	    height: number;
@@ -203,6 +281,7 @@ export namespace main {
 	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.codec = source["codec"];
 	        this.frames = source["frames"];
 	        this.width = source["width"];
 	        this.height = source["height"];
@@ -275,6 +354,7 @@ export namespace scrcpy {
 	    maxSize: number;
 	    maxFPS: number;
 	    bitRate: number;
+	    videoMode?: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new Options(source);
@@ -285,6 +365,7 @@ export namespace scrcpy {
 	        this.maxSize = source["maxSize"];
 	        this.maxFPS = source["maxFPS"];
 	        this.bitRate = source["bitRate"];
+	        this.videoMode = source["videoMode"];
 	    }
 	}
 

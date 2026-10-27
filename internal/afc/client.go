@@ -124,6 +124,21 @@ func (c *Client) MkDir(p string) error {
 	return nil
 }
 
+// Symlink preserves a link as a link when copying a tree, without reading its target.
+func (c *Client) Symlink(target, name string) error {
+	if strings.ContainsRune(target, 0) || strings.ContainsRune(name, 0) {
+		return errors.New("invalid symbolic link path")
+	}
+	data := make([]byte, 8)
+	binary.LittleEndian.PutUint64(data, 2) // AFC_SYMLINK
+	data = append(data, []byte(target+"\x00"+name+"\x00")...)
+	if err := c.sendPacket(makeLink, data, nil); err != nil {
+		return err
+	}
+	_, err := c.readPacket()
+	return err
+}
+
 // Remove deletes the file at the given path
 // If the path is a non-empty directory, an error will be returned
 func (c *Client) Remove(p string) error {

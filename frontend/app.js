@@ -1,5 +1,8 @@
 import {fileCall,fileSize,initializeFileManager} from './files.js';
 import {installFileDrop} from './drop.js';
+import {initializeShell} from './shell.js';
+import {initializeIOSSettings} from './ios-settings.js';
+import {runDeviceTool} from './tools.js';
 import {keyPacket, textPacket, touchPacket, scrollPacket, spsCodec, parsePacket} from './protocol.js';
 
 const $ = id => document.getElementById(id);
@@ -9,11 +12,15 @@ let starting = false, stopping = false, refreshing = false, streamGeneration = 0
 let smokeSerial = '', smokeFrames = 0, smokeReported = false;
 let fileSerial = '';
 let mirrorSerial = '', openDevices = new Set(), opening = false, toolBusy = false;
+const shellPanel=initializeShell({notice,onBusy:busy=>{toolBusy=busy;updateControls();}});
+const iosSettingsPanel=initializeIOSSettings({notice,onBusy:busy=>{toolBusy=busy;updateControls();}});
 let deviceListSignature='';
 let fittedOrientation='', noticeTimer=null;
 let controlsHideTimer=null;
 const controls=document.querySelector('.controls');
 let activeControls=null,activeSettings=null,activePlatform='';
+let activeCodec='',activeVideoModes=null,switchingVideo=false;
+const videoChoices=new Map(),videoModeNames={jpeg:'截图',h264:'USB H.264'};
 let pointerIntervalMS=0,lastWheelAt=0;
 const buttonControls={3:'home',4:'back',187:'recent',26:'power',25:'volumeDown',24:'volumeUp'};
 const heldKeys = new Set();
@@ -46,10 +53,10 @@ async function uploadFromDrop(paths){
   }finally{finished=true;clearInterval(timer);toolBusy=false;updateControls();}
 }
 
-async function call(method, serial, options) {
+async function call(method, serial, options, clipboard='') {
   const binding = window.go?.main?.App;
-  if (binding) return binding[method](...(['StartMirror','OpenDevice','DeviceTool'].includes(method) ? [serial, options] : []));
-  const response = await fetch('/api', {method:'POST', headers:{'Content-Type':'application/json',Authorization:`Bearer ${auth}`},body:JSON.stringify({method,serial,options:method==='DeviceTool'?undefined:options,action:method==='DeviceTool'?options:undefined})});
+  if (binding) return binding[method](...(method==='DeviceTool'?[serial,options,clipboard]:['StartMirror','OpenDevice'].includes(method)?[serial,options]:[]));
+  const response = await fetch('/api', {method:'POST', headers:{'Content-Type':'application/json',Authorization:`Bearer ${auth}`},body:JSON.stringify({method,serial,options:method==='DeviceTool'?undefined:options,action:method==='DeviceTool'?options:undefined,clipboard:method==='DeviceTool'?clipboard:undefined})});
   const result = await response.json();
   if (!response.ok) throw new Error(result.error || '后端请求失败');
   return result;
@@ -57,7 +64,7 @@ async function call(method, serial, options) {
 function reportSmoke(error='') {
   if(!smokeSerial||smokeReported)return;
   smokeReported=true;
-  void window.go.main.App.ReportSmoke({frames:smokeFrames,width:canvas.width,height:canvas.height,error});
+  void window.go.main.App.ReportSmoke({codec:activeCodec,frames:smokeFrames,width:canvas.width,height:canvas.height,error});
 }
 function notice(message, error=false) {
   $('notice').textContent=message; $('notice').classList.toggle('error',error);
@@ -67,6 +74,20 @@ function notice(message, error=false) {
 }
 function stateLabel(state) { return ({device:'已授权 · 就绪',unauthorized:'等待手机授权',offline:'设备离线',no:'驱动或权限异常',unavailable:'手机服务未就绪'})[state] || state; }
 function isLive() { return socket?.readyState === WebSocket.OPEN; }
+function updateVideoMode(device){
+  const modes=activeVideoModes||device?.videoModes||(device?.platform==='ios'?['jpeg']:device?['h264']:[]);
+  const select=$('video-mode');
+  for(const option of select.options)option.disabled=!modes.includes(option.value);
+  const choice=videoChoices.get(selected);
+  select.value=choice||activeCodec||(modes.includes('h264')?'h264':'jpeg');
+  // If a previously selected plugin is removed, keep its choice visible but
+  // disabled; the user can still explicitly switch back to screenshots.
+  select.disabled=!device||starting||stopping||switchingVideo||toolBusy||socket?.readyState===WebSocket.CONNECTING||modes.length<2&&(!choice||modes.includes(choice));
+  $('video-mode-current').textContent=isLive()?`当前：${videoModeNames[activeCodec]||activeCodec}`:starting||switchingVideo?'连接中…':'未连接';
+  const unavailable=device?.platform==='ios'&&!modes.includes('h264');
+  $('video-mode-hint').textContent=!device?'连接设备后检测可用方式':unavailable?'未检测到 PhoneVideoTweak，暂不可使用 USB H.264':modes.length<2?'此设备使用 USB H.264':switchingVideo?'正在切换投屏方式…':'切换后自动重新连接投屏';
+  select.title=unavailable?'安装 PhoneVideoTweak 并重启 SpringBoard 后可切换 USB H.264':'';
+}
 function updateControls() {
   const device = devices.find(d=>d.serial===selected);
   const capabilities=activeControls|| (device?.controls ? new Set(device.controls):null);
@@ -80,15 +101,21 @@ function updateControls() {
   $('stop').disabled = starting || stopping || !socket;
   document.querySelectorAll('[data-key]').forEach(b=>{
     const supported=!capabilities||capabilities.has(buttonControls[b.dataset.key]);
+    b.hidden=!supported;
     b.disabled=!isLive()||!supported;
     b.dataset.originalTitle??=b.title;
     b.title=supported?b.dataset.originalTitle:'当前设备未提供此操作';
   });
   $('open-files').disabled=toolBusy||!selected||!device||!['android','ios'].includes(device.platform);
+  $('open-shell').disabled=toolBusy||!device||!(device.platform==='ios'||device.platform==='android'&&device.state==='device');
+  $('ios-one-click').hidden=device?.platform!=='ios';
+  $('ios-one-click').disabled=toolBusy||device?.platform!=='ios'||device?.state!=='device';
   $('send-text').disabled=!isLive()||(capabilities&&!capabilities.has('text'));
   $('paste').disabled=$('send-text').disabled;
-  document.querySelectorAll('[data-tool]').forEach(b=>{b.disabled=toolBusy||!isLive()||device?.platform!=='android'; b.title=device?.platform==='ios'?'当前 iOS 连接不支持此操作':b.dataset.originalTitle||b.title;});
+  $('paste').hidden=!!capabilities&&!capabilities.has('text');
+  document.querySelectorAll('[data-tool]').forEach(b=>{b.hidden=device?.platform!=='android';b.disabled=toolBusy||!isLive()||device?.platform!=='android';b.title=b.dataset.originalTitle||b.title;});
   updateDeviceMenu();
+  updateVideoMode(device);
   for(const [id,setting] of [['max-size','maxSize'],['max-fps','maxFPS'],['bit-rate','bitRate']]){
     $(id).disabled=!!settings&&!settings.has(setting);
     $(id).title=$(id).disabled?'当前连接不支持此设置':'';
@@ -113,6 +140,9 @@ function updateDeviceMenu(){
   $('device-menu-connect').disabled=opening||device.state!=='device'||openDevices.has(menuSerial);
   $('device-menu-connect').title=openDevices.has(menuSerial)?'该手机的投屏窗口已打开':'';
   $('device-menu-files').disabled=toolBusy||!['ios','android'].includes(device.platform);
+  $('device-menu-shell').disabled=toolBusy||!(device.platform==='ios'||device.platform==='android'&&device.state==='device');
+  $('device-menu-ios-settings').hidden=device.platform!=='ios';
+  $('device-menu-ios-settings').disabled=toolBusy||device.platform!=='ios'||device.state!=='device';
 }
 function showDeviceMenu(serial,event){
   if(mirrorSerial||smokeSerial||starting||stopping)return;
@@ -127,6 +157,8 @@ function showDeviceMenu(serial,event){
 }
 $('device-menu-connect').onclick=()=>{const serial=menuSerial;closeDeviceMenu();void openDevice(serial);};
 $('device-menu-files').onclick=()=>{const serial=menuSerial;closeDeviceMenu();void openFiles(serial);};
+$('device-menu-shell').onclick=()=>{const serial=menuSerial;closeDeviceMenu();void shellPanel.open(serial);};
+$('device-menu-ios-settings').onclick=()=>{const device=devices.find(d=>d.serial===menuSerial);closeDeviceMenu();if(device&&!toolBusy)void iosSettingsPanel.open(device);};
 deviceMenu.addEventListener('keydown',event=>{
   if(event.key==='Escape'){event.preventDefault();event.stopPropagation();closeDeviceMenu(true);return;}
   if(event.key==='Tab'){closeDeviceMenu();return;}
@@ -198,7 +230,7 @@ function destroyStream() {
   if(socket) { socket.onclose=null; socket.onerror=null; socket.onmessage=null; socket.close(); socket=null; }
   if(decoder && decoder.state!=='closed') decoder.close();
   decoder=null; configData=null; resetUI(); updateControls();
-  activeControls=null;activeSettings=null;activePlatform='';updateControls();
+  activeControls=null;activeSettings=null;activePlatform='';activeCodec='';activeVideoModes=null;updateControls();
 }
 async function stop(message='投屏已停止。',error=false) {
   if(stopping)return;
@@ -294,16 +326,21 @@ function enqueueImage(queue,data,generation){
   })();
 }
 async function start() {
-  if(starting||socket)return;
+  if(starting||socket)return false;
   const device=devices.find(d=>d.serial===selected);
-  const expectedCodec=device?.codec||'h264';
-  if(expectedCodec==='h264'&&!('VideoDecoder' in window)) {notice('当前 WebView2 不支持视频解码，请安装或更新 Microsoft Edge WebView2 Runtime。',true);return;}
+  const expectedCodec=videoChoices.get(selected)||device?.codec||'h264';
+  if(expectedCodec==='h264'&&!('VideoDecoder' in window)) {notice('当前 WebView2 不支持视频解码，请安装或更新 Microsoft Edge WebView2 Runtime。',true);return false;}
   starting=true;updateControls();notice('正在推送服务并连接手机…');
   $('placeholder-title').textContent='正在建立投屏连接';$('placeholder-detail').textContent='首次连接可能需要几秒钟';
   try {
-    const result=await call('StartMirror',selected,{maxSize:Number($('max-size').value),maxFPS:Number($('max-fps').value),bitRate:Number($('bit-rate').value)});
+    const result=await call('StartMirror',selected,mirrorOptions());
+    if(result.codec==='h264'&&!('VideoDecoder' in window)){
+      await call('StopMirror');throw new Error('当前 WebView2 不支持视频解码，请安装或更新 Microsoft Edge WebView2 Runtime。');
+    }
     const generation=++streamGeneration;
     activeControls=result.controls?new Set(result.controls):null;activeSettings=result.settings?new Set(result.settings):null;activePlatform=device?.platform||'';
+    activeCodec=result.codec;activeVideoModes=result.videoModes||device?.videoModes||(activePlatform==='ios'?['jpeg']:['h264']);
+    if(!activeVideoModes.includes(activeCodec))activeVideoModes=[...activeVideoModes,activeCodec];
     pointerIntervalMS=result.pointerIntervalMS||0;lastWheelAt=0;
     const imageQueue={pending:null,busy:false};
     canvas.width=result.metadata.width;canvas.height=result.metadata.height;
@@ -329,7 +366,8 @@ async function start() {
       destroyStream();notice('投屏已断开，请检查手机连接后重新开始。',true);
       try {const state=await call('GetState');$('logs').textContent=state.logs||state.error||'连接已关闭';}catch{}
     };
-  } catch(error) {resetUI();notice(String(error.message||error),true);}
+    return true;
+  } catch(error) {resetUI();notice(String(error.message||error),true);return false;}
   finally {starting=false;updateControls();}
 }
 
@@ -376,7 +414,28 @@ canvas.addEventListener('keyup',event=>{const code=keyCodes[event.code];if(code&
 canvas.addEventListener('blur',releaseInput);window.addEventListener('blur',releaseInput);
 $('text-form').addEventListener('submit',event=>{event.preventDefault();const value=$('text-input').value;if(!value||!isLive())return;try{send(textPacket(value,true));$('text-input').value='';notice('文字已发送，请在手机输入框中确认。');}catch(e){notice(e.message,true);}});
 document.querySelectorAll('[data-key]').forEach(button=>button.onclick=()=>key(Number(button.dataset.key)));
-function mirrorOptions(){return {maxSize:Number($('max-size').value),maxFPS:Number($('max-fps').value),bitRate:Number($('bit-rate').value)};}
+function mirrorOptions(){return {maxSize:Number($('max-size').value),maxFPS:Number($('max-fps').value),bitRate:Number($('bit-rate').value),videoMode:videoChoices.get(selected)||'auto'};}
+$('video-mode').onchange=async()=>{
+  if(starting||stopping||switchingVideo||toolBusy){updateControls();return;}
+  const mode=$('video-mode').value,device=devices.find(d=>d.serial===selected);
+  const modes=activeVideoModes||device?.videoModes||(device?.platform==='ios'?['jpeg']:['h264']);
+  if(!modes.includes(mode)){updateControls();notice('当前设备未提供此投屏方式',true);return;}
+  const previous=activeCodec||videoChoices.get(selected)||device?.codec;
+  videoChoices.set(selected,mode);
+  if(!socket){updateControls();return;}
+  switchingVideo=true;releaseInput();updateControls();
+  try{
+    await stop('正在切换投屏方式…');
+    if(!await start()){
+      const error=$('notice').textContent;
+      if(previous&&previous!==mode){
+        videoChoices.set(selected,previous);
+        const restored=await start();
+        notice(`${error}${restored?'；已恢复'+videoModeNames[previous]:''}`,true);
+      }
+    }
+  }finally{switchingVideo=false;updateControls();}
+};
 async function openDevice(serial=selected){
   if(opening)return;
   selected=serial;opening=true;updateControls();
@@ -386,6 +445,8 @@ async function openDevice(serial=selected){
 }
 async function openFiles(serial=selected){if(toolBusy)return;toolBusy=true;updateControls();try{await fileCall('OpenFileManager',serial);}catch(error){notice(String(error.message||error),true);}finally{toolBusy=false;updateControls();}}
 $('open-files').onclick=()=>openFiles();
+$('open-shell').onclick=()=>{if(selected&&!toolBusy)void shellPanel.open(selected);};
+$('ios-one-click').onclick=()=>{const device=devices.find(d=>d.serial===selected);if(device&&!toolBusy)void iosSettingsPanel.open(device);};
 $('settings-toggle').onclick=()=>{
   showControls();
   const collapsed=document.body.classList.toggle('settings-collapsed');
@@ -396,8 +457,9 @@ for(const button of document.querySelectorAll('[data-tool]')){
   button.onclick=async()=>{
     if(toolBusy)return;toolBusy=true;updateControls();notice('正在执行设备操作…');
     try{
-      const result=await call('DeviceTool',selected,button.dataset.tool);
-      if(result){$('tool-title').textContent=button.querySelector('small').textContent;$('tool-output').textContent=result;$('tool-dialog').showModal();notice('设备操作已完成。');}
+      const action=button.dataset.tool,result=await runDeviceTool(action,selected,call);
+      if(action==='store')notice('已在手机上打开剪贴板包名对应的商店页面。');
+      else if(result){$('tool-title').textContent=button.querySelector('small').textContent;$('tool-output').textContent=result;$('tool-dialog').showModal();notice('设备操作已完成。');}
       else notice('已取消文件选择。');
     }catch(error){notice(String(error.message||error),true);}
     finally{toolBusy=false;updateControls();}
@@ -423,6 +485,7 @@ async function initialize() {
     document.body.className=mirrorMode?'mirroring settings-collapsed':'connecting';
     $('connection-window').hidden=mirrorMode;$('mirror-window').hidden=!mirrorMode;
     if(launch.settings?.maxSize){$('max-size').value=String(launch.settings.maxSize);$('max-fps').value=String(launch.settings.maxFPS);$('bit-rate').value=String(launch.settings.bitRate);}
+    if(['jpeg','h264'].includes(launch.settings?.videoMode)&&mirrorMode)videoChoices.set(mirrorSerial||smokeSerial,launch.settings.videoMode);
     await refresh();
     if(mirrorMode) {
       selected=mirrorSerial||smokeSerial;updateControls();

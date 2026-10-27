@@ -44,8 +44,10 @@ func TestIndependentWindowLifecycle(t *testing.T) {
 	}
 	first, second := newChild("android"), newChild("ios")
 	fileWindow := newChild("files:android")
+	shellWindow := newChild("shell:android")
 	waitCount(2)
 	_ = fileWindow.Close()
+	_ = shellWindow.Close()
 	if err := a.trackWindow("android", exec.Command("must-not-be-launched")); err == nil {
 		t.Fatal("duplicate window accepted")
 	}

@@ -5,13 +5,17 @@ import {phone} from '../models';
 import {device} from '../models';
 import {scrcpy} from '../models';
 
+export function ApplyIOSSettings(arg1:string,arg2:string):Promise<string>;
+
 export function BrowseFiles(arg1:string,arg2:string,arg3:string):Promise<main.FileListing>;
 
 export function CancelFileTransfer():Promise<void>;
 
 export function CreateFileDirectory(arg1:string,arg2:string,arg3:string,arg4:string):Promise<void>;
 
-export function DeviceTool(arg1:string,arg2:string):Promise<string>;
+export function DeleteFile(arg1:string,arg2:string,arg3:string):Promise<void>;
+
+export function DeviceTool(arg1:string,arg2:string,arg3:string):Promise<string>;
 
 export function DownloadFile(arg1:string,arg2:string,arg3:string):Promise<boolean>;
 
@@ -23,6 +27,8 @@ export function GetFileLocation(arg1:string):Promise<main.FileLocation>;
 
 export function GetFileTransfer():Promise<main.FileTransfer>;
 
+export function GetIOSSettings(arg1:string):Promise<main.IOSSettingsInfo>;
+
 export function GetLaunchOptions():Promise<main.LaunchOptions>;
 
 export function GetOpenDevices():Promise<Array<string>>;
@@ -33,7 +39,15 @@ export function OpenDevice(arg1:string,arg2:scrcpy.Options):Promise<void>;
 
 export function OpenFileManager(arg1:string):Promise<void>;
 
+export function OpenOpenSSHStore(arg1:string,arg2:string):Promise<void>;
+
+export function OpenShell(arg1:string):Promise<main.ShellLaunch>;
+
+export function PasteFile(arg1:string,arg2:string,arg3:string,arg4:string,arg5:string,arg6:string):Promise<void>;
+
 export function RememberDevice(arg1:string):Promise<void>;
+
+export function RememberIOSSettingsRegion(arg1:string,arg2:string):Promise<void>;
 
 export function RenameFile(arg1:string,arg2:string,arg3:string,arg4:string):Promise<void>;
 
