@@ -26,7 +26,7 @@ type Server struct {
 func Start(t *testing.T, targets map[uint32]string) *Server {
 	ports := make(map[uint32]map[uint16]string, len(targets))
 	for id, address := range targets {
-		ports[id] = map[uint16]string{8081: address}
+		ports[id] = map[uint16]string{27185: address}
 	}
 	return StartPorts(t, ports)
 }

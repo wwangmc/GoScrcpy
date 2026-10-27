@@ -16,9 +16,9 @@ import (
 )
 
 func TestIOSFileServices(t *testing.T) {
-	serial := os.Getenv("MKS_TEST_DEVICE")
+	serial := os.Getenv("PHONEVIDEO_TEST_DEVICE")
 	if serial == "" {
-		t.Skip("set MKS_TEST_DEVICE (or auto) for USB file integration")
+		t.Skip("set PHONEVIDEO_TEST_DEVICE (or auto) for USB file integration")
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), 90*time.Second)
 	defer cancel()

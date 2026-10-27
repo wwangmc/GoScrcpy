@@ -19,7 +19,7 @@ import (
 	wailsruntime "github.com/wailsapp/wails/v2/pkg/runtime"
 	"phonescreen/internal/adb"
 	"phonescreen/internal/device"
-	"phonescreen/internal/mks"
+	"phonescreen/internal/phonevideo"
 	"phonescreen/internal/scrcpy"
 	"phonescreen/internal/usbmux"
 )
@@ -199,7 +199,7 @@ func (a *App) GetDevices() ([]device.Device, error) {
 		defer scans.Done()
 		ctx, cancel := context.WithTimeout(a.ctx, 6*time.Second)
 		defer cancel()
-		ios, iosErr = mks.Scan(ctx, a.usbmux)
+		ios, iosErr = phonevideo.Scan(ctx, a.usbmux)
 	}()
 	scans.Wait()
 	devices := append(make([]device.Device, 0, len(android)+len(ios)), android...)
@@ -274,7 +274,7 @@ func (a *App) StartMirror(serial string, options scrcpy.Options) (Mirror, error)
 	a.lastError = ""
 	var session mirrorSession
 	if platform == "ios" {
-		session, err = mks.Start(a.ctx, a.usbmux, serial, options)
+		session, err = phonevideo.Start(a.ctx, a.usbmux, serial, options)
 	} else {
 		var client adb.Client
 		client, err = adb.Resolve()

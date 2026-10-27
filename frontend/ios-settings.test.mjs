@@ -11,7 +11,7 @@ function fixture(t,{fail=false}={}){
   globalThis.Option=class{constructor(text,value){this.text=text;this.value=value;}};
   const calls=[];
   globalThis.window={go:{main:{App:{
-    GetIOSSettings:async serial=>{calls.push(['load',serial]);return {region:'JP',choices:[{region:'US',name:'US',language:'en-US',locale:'en_US',timeZone:'America/New_York',carrierCount:13},{region:'JP',name:'Japan',language:'ja-JP',locale:'ja_JP',timeZone:'Asia/Tokyo',carrierCount:3}]};},
+    GetIOSSettings:async serial=>{calls.push(['load',serial]);return {region:'JP',choices:[{region:'US',name:'US',language:'en-US',locale:'en_US',timeZone:'America/New_York'},{region:'JP',name:'Japan',language:'ja-JP',locale:'ja_JP',timeZone:'Asia/Tokyo'}]};},
     RememberIOSSettingsRegion:async(serial,region)=>{calls.push(['remember',serial,region]);},
     ApplyIOSSettings:async(serial,region)=>{calls.push(['apply',serial,region]);if(fail)throw new Error('uncertain response');return 'settings accepted';},
   }}}};
@@ -28,6 +28,7 @@ test('remembered iOS region populates preview and full apply uses the selected p
   await f.nodes.get('ios-settings-apply').onclick();
   assert.deepEqual(f.calls,[['load','iphone-one'],['remember','iphone-one','US'],['apply','iphone-one','US']]);
   assert.equal(f.nodes.get('ios-settings-status').textContent,'settings accepted');assert.equal(f.nodes.get('ios-settings-close').disabled,false);
+  assert.equal(f.nodes.has('ios-settings-carriers'),false);
 });
 test('uncertain settings requests show failure and are not retried',async t=>{
   const f=fixture(t,{fail:true});await f.panel.open({serial:'iphone-one',platform:'ios'});await f.nodes.get('ios-settings-apply').onclick();

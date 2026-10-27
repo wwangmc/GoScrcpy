@@ -5,6 +5,14 @@
   "frontend:dir": "frontend",
   "frontend:install": "",
   "frontend:build": "",
-  "author": { "name": "PhoneManager" },
-  "info": { "companyName": "PhoneManager", "productName": "GoScrcpy", "productVersion": "0.1.0", "copyright": "", "comments": "Android screen mirroring and control with Go and Wails" }
+  "author": {
+    "name": "PhoneManager"
+  },
+  "info": {
+    "companyName": "PhoneManager",
+    "productName": "GoScrcpy",
+    "productVersion": "0.2.0",
+    "copyright": "",
+    "comments": "Android and jailbroken iOS USB mirroring and control"
+  }
 }

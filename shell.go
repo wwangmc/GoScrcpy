@@ -68,7 +68,7 @@ func (a *App) OpenShell(serial string) (ShellLaunch, error) {
 		if err != nil {
 			return result, err
 		}
-		// A working SSH port is sufficient even if MKS is unavailable.
+		// A working SSH port is sufficient even if PhoneVideo is unavailable.
 		conn, err := a.usbmux.Connect(ctx, device, 22)
 		if err == nil {
 			_ = conn.Close()

@@ -11,10 +11,20 @@ import (
 	"testing"
 
 	"phonescreen/internal/mobileshell"
+	"phonescreen/internal/phonevideo"
 	"phonescreen/internal/usbmux/muxtest"
 )
 
 func TestMissingOpenSSHPreventsTerminalAndOffersStores(t *testing.T) {
+	testMissingOpenSSHPreventsTerminalAndOffersStores(t, phonevideo.Port)
+}
+
+func TestOpenSSHAuxiliaryLegacyFallback(t *testing.T) {
+	testMissingOpenSSHPreventsTerminalAndOffersStores(t, phonevideo.LegacyPort)
+}
+
+func testMissingOpenSSHPreventsTerminalAndOffersStores(t *testing.T, port uint16) {
+	t.Helper()
 	t.Setenv("ADB_PATH", filepath.Join(t.TempDir(), "missing-adb"))
 	var opened string
 	phone := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -34,7 +44,7 @@ func TestMissingOpenSSHPreventsTerminalAndOffersStores(t *testing.T) {
 		_ = json.NewEncoder(w).Encode(map[string]string{"status": "success", "data": data})
 	}))
 	defer phone.Close()
-	mux := muxtest.Start(t, map[uint32]string{1: phone.Listener.Addr().String()})
+	mux := muxtest.StartPorts(t, map[uint32]map[uint16]string{1: {port: phone.Listener.Addr().String()}})
 	a, err := NewApp(server)
 	if err != nil {
 		t.Fatal(err)

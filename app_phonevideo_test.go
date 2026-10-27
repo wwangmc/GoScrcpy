@@ -16,9 +16,9 @@ import (
 )
 
 func TestIOSDeviceWebSocketLifecycle(t *testing.T) {
-	serial := os.Getenv("MKS_TEST_DEVICE")
+	serial := os.Getenv("PHONEVIDEO_TEST_DEVICE")
 	if serial == "" {
-		t.Skip("set MKS_TEST_DEVICE for the USB MKS integration test")
+		t.Skip("set PHONEVIDEO_TEST_DEVICE for the USB PhoneVideo integration test")
 	}
 	a, err := NewApp(server)
 	if err != nil {
@@ -90,14 +90,14 @@ func TestIOSDeviceWebSocketLifecycle(t *testing.T) {
 			t.Fatal("USB session leaked after stop/disconnect")
 		}
 		a.StopMirror()
-		t.Logf("attempt %d: unified list, USB MKS %s %dx%d, input, reconnect, close OK", attempt, mirror.Codec, mirror.Metadata.Width, mirror.Metadata.Height)
+		t.Logf("attempt %d: unified list, USB PhoneVideo %s %dx%d, input, reconnect, close OK", attempt, mirror.Codec, mirror.Metadata.Width, mirror.Metadata.Height)
 	}
 }
 
 func TestIOSVideoModeSwitch(t *testing.T) {
-	serial := os.Getenv("MKS_TEST_DEVICE")
+	serial := os.Getenv("PHONEVIDEO_TEST_DEVICE")
 	if serial == "" {
-		t.Skip("set MKS_TEST_DEVICE for real USB mode switching")
+		t.Skip("set PHONEVIDEO_TEST_DEVICE for real USB mode switching")
 	}
 	a, err := NewApp(server)
 	if err != nil {

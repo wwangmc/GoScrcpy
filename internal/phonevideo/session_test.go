@@ -1,4 +1,4 @@
-package mks
+package phonevideo
 
 import (
 	"bytes"
@@ -152,15 +152,27 @@ func (p *fakePhone) handler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func TestMKSUSBSessionAndControls(t *testing.T) {
-	// Occupying local 8081 cannot affect any phone connection. An existing listener is fine too.
-	if occupied, err := net.Listen("tcp", "127.0.0.1:8081"); err == nil {
+func TestPhoneVideoUSBSessionAndControls(t *testing.T) {
+	testUSBSessionAndControls(t, Port)
+}
+
+func TestLegacyUSBSessionAndControls(t *testing.T) {
+	testUSBSessionAndControls(t, LegacyPort)
+}
+
+func testUSBSessionAndControls(t *testing.T, controlPort uint16) {
+	t.Helper()
+	// Occupying local 27185 cannot affect any phone connection. An existing listener is fine too.
+	if occupied, err := net.Listen("tcp", "127.0.0.1:27185"); err == nil {
 		defer occupied.Close()
 	}
 	phone := &fakePhone{}
 	httpPhone := httptest.NewServer(http.HandlerFunc(phone.handler))
 	defer httpPhone.Close()
-	mux := muxtest.Start(t, map[uint32]string{1: strings.TrimPrefix(httpPhone.URL, "http://"), 2: strings.TrimPrefix(httpPhone.URL, "http://")})
+	mux := muxtest.StartPorts(t, map[uint32]map[uint16]string{
+		1: {controlPort: strings.TrimPrefix(httpPhone.URL, "http://")},
+		2: {controlPort: strings.TrimPrefix(httpPhone.URL, "http://")},
+	})
 	devices, err := Scan(context.Background(), mux.Client)
 	if err != nil || len(devices) != 2 {
 		t.Fatalf("scan=%+v err=%v", devices, err)
@@ -175,6 +187,9 @@ func TestMKSUSBSessionAndControls(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer s.Close()
+	if s.api.ControlPort() != controlPort || !strings.Contains(s.Logs(), s.api.ServiceName()) {
+		t.Fatalf("wrong provider: %s", s.Logs())
+	}
 	if s.Encoding() != "jpeg" || s.Info().Width != 8 || s.Info().Height != 12 || !s.Claim() || s.Claim() {
 		t.Fatal("metadata, format, or session claim incorrect")
 	}

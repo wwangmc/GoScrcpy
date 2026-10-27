@@ -4,15 +4,15 @@ import (
 	"context"
 	"errors"
 
-	"phonescreen/internal/mks"
+	"phonescreen/internal/phonevideo"
 )
 
-func (a *App) iosAPI(ctx context.Context, serial string) (*mks.API, error) {
+func (a *App) iosAPI(ctx context.Context, serial string) (*phonevideo.API, error) {
 	device, err := usbDevice(ctx, a.usbmux, serial)
 	if err != nil {
 		return nil, err
 	}
-	return mks.NewAPI(a.usbmux, device), nil
+	return phonevideo.NewAPI(a.usbmux, device), nil
 }
 
 func (a *App) beginIOSSettingsOperation() (func(), error) {

@@ -9,10 +9,20 @@ import (
 	"sync"
 	"testing"
 
+	"phonescreen/internal/phonevideo"
 	"phonescreen/internal/usbmux/muxtest"
 )
 
 func TestIOSSettingsUSBAndPerPhonePreference(t *testing.T) {
+	testIOSSettingsUSBAndPerPhonePreference(t, phonevideo.Port)
+}
+
+func TestIOSSettingsLegacyFallback(t *testing.T) {
+	testIOSSettingsUSBAndPerPhonePreference(t, phonevideo.LegacyPort)
+}
+
+func testIOSSettingsUSBAndPerPhonePreference(t *testing.T, port uint16) {
+	t.Helper()
 	t.Setenv("ADB_PATH", filepath.Join(t.TempDir(), "missing-adb"))
 	var mu sync.Mutex
 	var savedPath string
@@ -32,7 +42,9 @@ func TestIOSSettingsUSBAndPerPhonePreference(t *testing.T) {
 		_ = json.NewEncoder(w).Encode(map[string]string{"status": "success", "data": "iPhone;;model;;name;;product"})
 	}))
 	defer phone.Close()
-	mux := muxtest.Start(t, map[uint32]string{1: phone.Listener.Addr().String(), 2: phone.Listener.Addr().String()})
+	mux := muxtest.StartPorts(t, map[uint32]map[uint16]string{
+		1: {port: phone.Listener.Addr().String()}, 2: {port: phone.Listener.Addr().String()},
+	})
 	a, err := NewApp(server)
 	if err != nil {
 		t.Fatal(err)
@@ -60,8 +72,8 @@ func TestIOSSettingsUSBAndPerPhonePreference(t *testing.T) {
 		t.Fatal(message, err)
 	}
 	mu.Lock()
-	if posts != 1 || !strings.HasPrefix(savedPath, "/setAllSetting?") || savedBody["country"] != "United States" || len(savedBody["opts"].([]any)) != 13 {
-		t.Error("wrong complete settings request")
+	if posts != 1 || !strings.HasPrefix(savedPath, "/setAllSetting?") || savedBody == nil || len(savedBody) != 0 {
+		t.Errorf("expected system settings only, got %s %+v", savedPath, savedBody)
 	}
 	mu.Unlock()
 	a.mirrorSerial = "USB-ONE"

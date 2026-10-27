@@ -1,5 +1,5 @@
-// Package mks consumes mks_tweak's existing API exclusively through USBMux.
-package mks
+// Package phonevideo consumes PhoneVideoTweak video and control exclusively through USBMux.
+package phonevideo
 
 import (
 	"bytes"
@@ -20,12 +20,37 @@ import (
 	"phonescreen/internal/usbmux"
 )
 
-const Port uint16 = 8081 // Device port only. The computer never listens on 8081.
+const Port uint16 = 27185 // Device port only. The computer never listens on 27185.
+const LegacyPort uint16 = 8081
+
+func (a *API) serviceURL(scheme, path string) string {
+	// A stable virtual host keeps the first fallback connection in the same pool.
+	// dialUSB alone selects the real device port; this hostname is never resolved.
+	return fmt.Sprintf("%s://phonevideo.local:%d%s", scheme, Port, path)
+}
 
 type API struct {
 	client    *http.Client
 	transport *http.Transport
 	dialUSB   func(context.Context) (net.Conn, error)
+	routeMu   sync.Mutex
+	port      uint16
+}
+
+func (a *API) ControlPort() uint16 {
+	a.routeMu.Lock()
+	defer a.routeMu.Unlock()
+	if a.port == 0 {
+		return Port
+	}
+	return a.port
+}
+
+func (a *API) ServiceName() string {
+	if a.ControlPort() == LegacyPort {
+		return "mks_tweak"
+	}
+	return "PhoneVideoTweak"
 }
 
 type timedConn struct{ net.Conn }
@@ -40,10 +65,34 @@ func (c timedConn) Write(b []byte) (int, error) {
 }
 
 func NewAPI(mux *usbmux.Client, d usbmux.Device) *API {
-	dialUSB := func(ctx context.Context) (net.Conn, error) { return mux.Connect(ctx, d, Port) }
+	a := &API{}
+	a.dialUSB = func(ctx context.Context) (net.Conn, error) {
+		a.routeMu.Lock()
+		if port := a.port; port != 0 {
+			a.routeMu.Unlock()
+			return mux.Connect(ctx, d, port)
+		}
+		defer a.routeMu.Unlock()
+		conn, preferredErr := mux.Connect(ctx, d, Port)
+		if preferredErr == nil {
+			a.port = Port
+			return conn, nil
+		}
+		if ctx.Err() != nil {
+			return nil, ctx.Err()
+		}
+		conn, err := mux.Connect(ctx, d, LegacyPort)
+		if err != nil {
+			return nil, fmt.Errorf("PhoneVideoTweak :%d: %v; mks_tweak :%d: %w", Port, preferredErr, LegacyPort, err)
+		}
+		// Pin the provider for all HTTP and WebSocket connections in this API.
+		// An active session must never switch input providers on a reconnect.
+		a.port = LegacyPort
+		return conn, nil
+	}
 	t := &http.Transport{
 		DialContext: func(ctx context.Context, network, address string) (net.Conn, error) {
-			conn, err := dialUSB(ctx)
+			conn, err := a.dialUSB(ctx)
 			if err != nil {
 				return nil, err
 			}
@@ -51,12 +100,14 @@ func NewAPI(mux *usbmux.Client, d usbmux.Device) *API {
 		},
 		MaxConnsPerHost: 4, MaxIdleConnsPerHost: 2, IdleConnTimeout: 10 * time.Second, ResponseHeaderTimeout: 4 * time.Second,
 	}
-	return &API{client: &http.Client{Transport: t, CheckRedirect: func(*http.Request, []*http.Request) error { return http.ErrUseLastResponse }}, transport: t, dialUSB: dialUSB}
+	a.client = &http.Client{Transport: t, CheckRedirect: func(*http.Request, []*http.Request) error { return http.ErrUseLastResponse }}
+	a.transport = t
+	return a
 }
 
 func (a *API) ConnectControl(ctx context.Context) (*websocket.Conn, error) {
 	dialer := websocket.Dialer{NetDialContext: func(ctx context.Context, _, _ string) (net.Conn, error) { return a.dialUSB(ctx) }, HandshakeTimeout: 2 * time.Second, WriteBufferSize: 1024, ReadBufferSize: 1024}
-	conn, response, err := dialer.DialContext(ctx, "ws://mks.local:8081/", nil)
+	conn, response, err := dialer.DialContext(ctx, a.serviceURL("ws", "/"), nil)
 	if err != nil && response != nil {
 		_ = response.Body.Close()
 	}
@@ -75,7 +126,7 @@ func (a *API) request(ctx context.Context, path string, body any) (*http.Respons
 		}
 		input = bytes.NewReader(b)
 	}
-	req, err := http.NewRequestWithContext(ctx, method, "http://mks.local:8081"+path, input)
+	req, err := http.NewRequestWithContext(ctx, method, a.serviceURL("http", path), input)
 	if err != nil {
 		return nil, err
 	}
@@ -165,7 +216,7 @@ func Scan(ctx context.Context, mux *usbmux.Client) ([]device.Device, error) {
 			defer cancel()
 			info, err := api.JSON(probe, "/deviceInfo?type=30", nil)
 			if err != nil {
-				item.Error = "USB 已连接，无法访问手机服务，请确认 mks_tweak 正在监听手机端 8081。" + err.Error()
+				item.Error = "USB 已连接，无法访问手机服务，请确认 PhoneVideoTweak（27185）或 mks_tweak（8081）正常运行。" + err.Error()
 			} else {
 				parts := strings.Split(info, ";;")
 				if len(parts) < 4 || parts[0] == "" {

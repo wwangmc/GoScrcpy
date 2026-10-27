@@ -1,0 +1,47 @@
+name: Build GoScrcpy Windows
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: goscrcpy-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test
+        shell: pwsh
+        run: ./scripts/test.ps1
+      - name: Build and package
+        shell: pwsh
+        run: ./scripts/package.ps1
+      - name: Upload Windows package
+        uses: actions/upload-artifact@v4
+        with:
+          name: GoScrcpy-windows-amd64
+          path: |
+            dist/*.zip
+            dist/GoScrcpy.exe
+            dist/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 14

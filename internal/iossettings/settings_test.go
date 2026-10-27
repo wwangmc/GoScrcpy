@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"net/url"
-	"reflect"
 	"testing"
 )
 
@@ -23,14 +22,11 @@ func (r *recorder) JSON(_ context.Context, path string, body any) (string, error
 	return "", r.err
 }
 
-func TestExtensionPresetsAndPayloadArePreserved(t *testing.T) {
+func TestSystemPresetsNeverSendApplicationConfiguration(t *testing.T) {
 	choices, err := Choices()
 	if err != nil || len(choices) != 47 {
 		t.Fatalf("choices=%d error=%v", len(choices), err)
 	}
-	original, _ := presets.ReadFile("data/opt.json")
-	var operators map[string]json.RawMessage
-	_ = json.Unmarshal(original, &operators)
 	for _, choice := range choices {
 		r := &recorder{}
 		got, err := Apply(context.Background(), r, choice.Region)
@@ -44,27 +40,20 @@ func TestExtensionPresetsAndPayloadArePreserved(t *testing.T) {
 		if u.Path != "/setAllSetting" || u.Query().Get("timeZone") != choice.TimeZone || u.Query().Get("locale") != choice.Locale || u.Query().Get("lang") != choice.Language || len(u.Query()) != 3 {
 			t.Fatal("extension query parameters changed", r.path)
 		}
-		key := choice.Region
-		if key == "KW" {
-			key = "kw"
-		}
-		var want, actual any
-		_ = json.Unmarshal(operators[key], &want)
 		raw, err := json.Marshal(r.body)
 		if err != nil {
 			t.Fatal(err)
 		}
-		_ = json.Unmarshal(raw, &actual)
-		if !reflect.DeepEqual(want, actual) {
-			t.Fatalf("carrier payload changed for %s", choice.Region)
+		if string(raw) != "{}" {
+			t.Fatalf("application configuration sent for %s: %s", choice.Region, raw)
 		}
 	}
 	us, err := Lookup(" us ")
-	if err != nil || us.Locale != "en_US" || us.Language != "en-US" || us.TimeZone != "America/New_York" || us.CarrierCount != 13 {
+	if err != nil || us.Name == "" || us.Locale != "en_US" || us.Language != "en-US" || us.TimeZone != "America/New_York" {
 		t.Fatalf("%+v %v", us, err)
 	}
 	if kw, err := Lookup("kw"); err != nil || kw.Region != "KW" {
-		t.Fatal("lowercase carrier key was not normalized")
+		t.Fatal("lowercase region key was not normalized")
 	}
 }
 

@@ -31,7 +31,7 @@ func TestUSBDeviceIsolationAndPortByteOrder(t *testing.T) {
 		t.Fatalf("Wi-Fi device was not filtered: %+v", devices)
 	}
 	for _, device := range devices {
-		conn, err := mux.Client.Connect(ctx, device, 8081)
+		conn, err := mux.Client.Connect(ctx, device, 27185)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -52,7 +52,7 @@ func TestUSBDeviceIsolationAndPortByteOrder(t *testing.T) {
 			t.Fatal("wrong remote port was accepted")
 		}
 		device.Properties.ConnectionType = "Network"
-		if _, err = mux.Client.Connect(ctx, device, 8081); err == nil {
+		if _, err = mux.Client.Connect(ctx, device, 27185); err == nil {
 			t.Fatal("Wi-Fi connection was accepted")
 		}
 	}

@@ -1,4 +1,4 @@
-package mks
+package phonevideo
 
 import (
 	"context"
@@ -52,7 +52,7 @@ func (s *Session) position(packet []byte, offset int) (int, int, error) {
 	return x * s.physicalW / w, y * s.physicalH / h, nil
 }
 
-// The desktop's shared control envelope is translated into MKS's public API.
+// The desktop's shared control envelope is translated into PhoneVideo's public API.
 // No shell, network-address, application-management or other privileged API is used.
 func (s *Session) WriteControl(packet []byte) error {
 	if err := scrcpy.ValidateControl(packet); err != nil {
@@ -67,7 +67,7 @@ func (s *Session) WriteControl(packet []byte) error {
 	case 0:
 		if packet[1] != 0 {
 			return nil
-		} // MKS key endpoints already send press + release.
+		} // PhoneVideo key endpoints already send press + release.
 		code := binary.BigEndian.Uint32(packet[2:])
 		path := ""
 		switch code {

@@ -11,7 +11,7 @@ export function initializeIOSSettings({notice,onBusy=()=>{}}){
   function preview(){
     const choice=choices.find(c=>c.region===$('ios-settings-region').value);
     $('ios-settings-language').textContent=choice?.language||'—';$('ios-settings-locale').textContent=choice?.locale||'—';
-    $('ios-settings-timezone').textContent=choice?.timeZone||'—';$('ios-settings-carriers').textContent=choice?`${choice.carrierCount} 条`:'—';
+    $('ios-settings-timezone').textContent=choice?.timeZone||'—';
     $('ios-settings-apply').disabled=busy||!choice;
   }
   function update(){
@@ -36,7 +36,7 @@ export function initializeIOSSettings({notice,onBusy=()=>{}}){
   dialog.addEventListener('pointerdown',e=>{pressedOutside=outside(e);});dialog.addEventListener('pointercancel',()=>{pressedOutside=false;});
   dialog.addEventListener('click',e=>{const close=pressedOutside&&outside(e)&&!busy;pressedOutside=false;if(close){e.preventDefault();e.stopPropagation();dialog.close();}});
   $('ios-settings-region').addEventListener('change',()=>{
-    preview();status('将同步设置语言、地区、时区及插件运营商参数。');
+    preview();status('将同步设置系统语言、地区和时区。');
     const target=serial,region=$('ios-settings-region').value;
     if(!choices.some(c=>c.region===region))return;
     selectedRegion=region;
@@ -58,7 +58,7 @@ export function initializeIOSSettings({notice,onBusy=()=>{}}){
       const data=await iosSettingsCall('GetIOSSettings',serial);choices=data.choices;
       selectedRegion=choices.some(c=>c.region===data.region)?data.region:choices[0]?.region||'';
       filterRegions();
-      status('将同步设置语言、地区、时区及插件运营商参数。');
+      status('将同步设置系统语言、地区和时区。');
     }catch(e){status(String(e.message||e),true);}
     finally{busy=false;onBusy(false);update();}
   }};

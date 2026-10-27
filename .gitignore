@@ -1,5 +1,6 @@
 /.cache/
 /bin/
+/dist/
 /build/bin/
 *.log
 

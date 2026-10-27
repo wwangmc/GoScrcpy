@@ -31,7 +31,7 @@ func (a *App) iosSettingsDevice(serial string) error {
 				return errors.New("一键设置仅支持 iOS 手机")
 			}
 			if device.State != "device" {
-				return errors.New("手机设置服务未就绪，请确认 mks_tweak 正常运行")
+				return errors.New("手机设置服务未就绪，请确认 PhoneVideoTweak 或 mks_tweak 正常运行")
 			}
 			return nil
 		}
@@ -102,5 +102,5 @@ func (a *App) ApplyIOSSettings(serial, region string) (string, error) {
 	if _, err = iossettings.Apply(ctx, api, choice.Region); err != nil {
 		return "", fmt.Errorf("未确认一键设置完成：%w。部分设置可能已提交，请先查看手机状态再操作", err)
 	}
-	return "手机已接收「" + choice.Name + " / " + choice.Region + "」的语言、地区、时区和运营商参数，系统设置将异步生效。", nil
+	return "手机已接收「" + choice.Name + " / " + choice.Region + "」的语言、地区和时区设置，系统设置将异步生效。", nil
 }

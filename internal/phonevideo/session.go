@@ -1,4 +1,4 @@
-package mks
+package phonevideo
 
 import (
 	"bytes"
@@ -80,7 +80,7 @@ func Start(parent context.Context, mux *usbmux.Client, serial string, options sc
 		return nil, err
 	}
 	s.metadata.Name = strings.Split(info, ";;")[0]
-	// Prefer the independent PhoneVideo plugin. Input still uses mks_tweak.
+	// Video and input are both supplied by PhoneVideoTweak, on separate USB channels.
 	if options.VideoMode != "jpeg" {
 		video, metadata, absent, videoErr := startVideo(ctx, mux, *found, options)
 		if videoErr != nil {
@@ -93,8 +93,7 @@ func Start(parent context.Context, mux *usbmux.Client, serial string, options sc
 			s.video, s.metadata = video, metadata
 		}
 	}
-	// ios_control's IOSurface screenshot path is much faster on the installed plugin
-	// than its MJPEG producer. Keep one request in flight and never buffer old frames.
+	// Keep one IOSurface screenshot request in flight and never buffer old frames.
 	if s.video == nil {
 		s.pending, err = s.nextImage()
 		if err != nil {
@@ -109,8 +108,8 @@ func Start(parent context.Context, mux *usbmux.Client, serial string, options sc
 		}
 		s.metadata.Width, s.metadata.Height = uint32(config.Width), uint32(config.Height)
 	}
-	// Match ios_control: input has its own persistent USB WebSocket and does not
-	// wait for an HTTP round trip on every mouse movement. Old plugins can use HTTP.
+	// Input has its own persistent USB WebSocket and does not wait for an HTTP
+	// round trip on every mouse movement. HTTP is used if the handshake fails.
 	s.control, _ = s.api.ConnectControl(ctx)
 	if s.control != nil {
 		go func() {
@@ -225,9 +224,9 @@ func (s *Session) Logs() string {
 		control = "WebSocket"
 	}
 	if s.video != nil {
-		return fmt.Sprintf("PhoneVideo / USBMux → device :%d / H.264 / target %d FPS / mks_tweak input %s", PhoneVideoPort, s.fps, control)
+		return fmt.Sprintf("PhoneVideo / USBMux → device :%d / H.264 / target %d FPS / %s :%d input %s", PhoneVideoPort, s.fps, s.api.ServiceName(), s.api.ControlPort(), control)
 	}
-	return fmt.Sprintf("mks_tweak / USBMux → device :8081 / /screenshot?quality=%s / target %d FPS / input %s", s.quality, s.fps, control)
+	return fmt.Sprintf("%s / USBMux → device :%d / /screenshot?quality=%s / target %d FPS / input %s", s.api.ServiceName(), s.api.ControlPort(), s.quality, s.fps, control)
 }
 func (s *Session) Claim() bool {
 	s.claimMu.Lock()

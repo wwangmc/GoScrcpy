@@ -43,7 +43,6 @@ export namespace iossettings {
 	    locale: string;
 	    language: string;
 	    timeZone: string;
-	    carrierCount: number;
 
 	    static createFrom(source: any = {}) {
 	        return new Choice(source);
@@ -56,7 +55,6 @@ export namespace iossettings {
 	        this.locale = source["locale"];
 	        this.language = source["language"];
 	        this.timeZone = source["timeZone"];
-	        this.carrierCount = source["carrierCount"];
 	    }
 	}
 

@@ -10,7 +10,7 @@
     <div id="devices" class="devices" role="listbox" aria-label="连接的设备"></div>
     <p class="hint">每台手机拥有独立窗口，可同时投屏和操作。</p>
   </section>
-  <div class="connection-help"><span>ⓘ</span><p>使用 USB 数据线连接手机，并允许手机上的连接或调试授权。<small>支持 Android 与安装 MKS 的越狱 iOS。</small></p></div>
+  <div class="connection-help"><span>ⓘ</span><p>使用 USB 数据线连接手机，并允许手机上的连接或调试授权。<small>支持 Android 与安装 PhoneVideoTweak 或 MKS 的越狱 iOS。</small></p></div>
   <div class="connection-status"><span class="dot" id="adb-dot"></span><span id="adb-label">正在检测设备…</span></div>
 </section>
 <section id="file-window" class="file-window" hidden aria-label="手机文件管理">
@@ -59,7 +59,7 @@
       <button id="paste" class="rail-button" title="将电脑剪贴板文字粘贴到手机"><span>▣</span><small>粘贴</small></button>
       <button id="open-files" class="rail-button" title="打开文件管理，电脑与手机双向传文件"><span>↔</span><small>文件</small></button>
       <button id="open-shell" class="rail-button" title="打开手机命令行：Android ADB / iOS OpenSSH"><span>›_</span><small>Shell</small></button>
-      <button id="ios-one-click" class="rail-button" title="一键设置 iOS 语言、地区、时区及插件运营商参数" hidden><span>⚙</span><small>一键设置</small></button>
+      <button id="ios-one-click" class="rail-button" title="一键设置 iOS 系统语言、地区和时区" hidden><span>⚙</span><small>一键设置</small></button>
       <button data-tool="package" class="rail-button" title="获取当前应用包名"><span>⌘</span><small>包名</small></button>
       <button data-tool="store" class="rail-button" title="从电脑剪贴板识别包名，在手机商店打开对应应用"><span>▱</span><small>去商店</small></button>
       <div class="rail-separator"></div>
@@ -81,7 +81,7 @@
 <footer class="bottom-line"><span id="notice" role="status">正在查找已连接的手机…</span><button id="logs-toggle" class="text-button">诊断日志</button></footer><pre id="logs" hidden></pre>
 <dialog id="tool-dialog"><div class="card-heading"><h2 id="tool-title">设备信息</h2><button id="tool-close" class="icon-button" aria-label="关闭">×</button></div><pre id="tool-output"></pre><button id="tool-copy" class="secondary">复制内容</button></dialog>
 <dialog id="openssh-dialog" aria-labelledby="openssh-title"><h2 id="openssh-title">手机未安装 OpenSSH</h2><p>iOS 命令行需要 OpenSSH 服务。选择手机上的商店前往安装，安装并启动服务后再次打开 Shell。</p><div class="openssh-actions"><button id="openssh-sileo" class="primary" type="button">前往 Sileo</button><button id="openssh-cydia" class="secondary" type="button">前往 Cydia</button><button id="openssh-close" class="text-button" type="button">关闭</button></div><p id="openssh-status" role="status" aria-live="polite"></p></dialog>
-<dialog id="ios-settings-dialog" aria-labelledby="ios-settings-title"><div class="card-heading"><div><h2 id="ios-settings-title">一键设置 iOS</h2><p id="ios-settings-device" class="tiny"></p></div><button id="ios-settings-close" class="text-button" type="button">关闭</button></div><label for="ios-settings-region">目标地区</label><input id="ios-settings-search" type="search" placeholder="搜索地区代码或名称，如 US、美国" aria-label="搜索目标地区" autocomplete="off" spellcheck="false" aria-controls="ios-settings-region"><select id="ios-settings-region" aria-describedby="ios-settings-search-status"></select><p id="ios-settings-search-status" class="tiny" role="status" aria-live="polite"></p><dl class="ios-settings-preview"><dt>系统语言</dt><dd id="ios-settings-language">—</dd><dt>地区格式</dt><dd id="ios-settings-locale">—</dd><dt>时区</dt><dd id="ios-settings-timezone">—</dd><dt>插件运营商参数</dt><dd id="ios-settings-carriers">—</dd></dl><button id="ios-settings-apply" class="primary" type="button">一键应用</button><p id="ios-settings-status" role="status" aria-live="polite"></p></dialog>
+<dialog id="ios-settings-dialog" aria-labelledby="ios-settings-title"><div class="card-heading"><div><h2 id="ios-settings-title">一键设置 iOS</h2><p id="ios-settings-device" class="tiny"></p></div><button id="ios-settings-close" class="text-button" type="button">关闭</button></div><label for="ios-settings-region">目标地区</label><input id="ios-settings-search" type="search" placeholder="搜索地区代码或名称，如 US、美国" aria-label="搜索目标地区" autocomplete="off" spellcheck="false" aria-controls="ios-settings-region"><select id="ios-settings-region" aria-describedby="ios-settings-search-status"></select><p id="ios-settings-search-status" class="tiny" role="status" aria-live="polite"></p><dl class="ios-settings-preview"><dt>系统语言</dt><dd id="ios-settings-language">—</dd><dt>地区格式</dt><dd id="ios-settings-locale">—</dd><dt>时区</dt><dd id="ios-settings-timezone">—</dd></dl><button id="ios-settings-apply" class="primary" type="button">一键应用</button><p id="ios-settings-status" role="status" aria-live="polite"></p></dialog>
 <div id="device-menu" class="device-menu" role="menu" aria-label="设备操作" hidden><button id="device-menu-connect" role="menuitem" type="button">连接手机</button><button id="device-menu-files" role="menuitem" type="button">文件管理</button><button id="device-menu-shell" role="menuitem" type="button">Shell 命令行</button><button id="device-menu-ios-settings" role="menuitem" type="button" hidden>一键设置 iOS</button></div>
 <script type="module" src="/app.js"></script>
 </body></html>
