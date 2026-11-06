@@ -1,0 +1,9 @@
+Package: com.phonemanager.afprobe
+Name: AFProbe
+Version: 0.1.1
+Architecture: iphoneos-arm
+Description: Scoped AppsFlyer cache probe for GoScrcpy
+Maintainer: Developer
+Author: Developer
+Section: Tweaks
+Depends: mobilesubstrate

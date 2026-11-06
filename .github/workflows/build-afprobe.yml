@@ -1,0 +1,60 @@
+name: Build AFProbe universal
+on:
+  push:
+    branches: ['build/afprobe-*']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  package:
+    runs-on: macos-15
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - mode: rootless
+            type: 1
+          - mode: rootfull
+            type: 0
+    defaults:
+      run:
+        shell: bash
+        working-directory: companions/AFProbe
+    env:
+      HOMEBREW_NO_AUTO_UPDATE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Prepare Theos
+        run: |
+          xcodebuild -version
+          brew install make ldid xz
+          echo "$(brew --prefix make)/libexec/gnubin" >> "$GITHUB_PATH"
+          echo "THEOS=$RUNNER_TEMP/theos" >> "$GITHUB_ENV"
+          git clone --recursive --depth 1 https://github.com/roothide/theos.git "$RUNNER_TEMP/theos"
+          git clone --depth 1 --filter=blob:none --sparse https://github.com/theos/sdks.git "$RUNNER_TEMP/sdks"
+          git -C "$RUNNER_TEMP/sdks" sparse-checkout set iPhoneOS16.5.sdk
+          mkdir -p "$RUNNER_TEMP/theos/sdks"
+          cp -R "$RUNNER_TEMP/sdks/iPhoneOS16.5.sdk" "$RUNNER_TEMP/theos/sdks/"
+      - name: Build and verify universal binaries
+        run: |
+          set -o pipefail
+          make TYPE=${{ matrix.type }} ARCHS="arm64 arm64e" TARGET=iphone:clang:16.5:14.0 FINALPACKAGE=1 clean package 2>&1 | tee build.log
+          for name in AFProbe.dylib gosc-afprobe; do
+            binary=$(find .theos/obj -type f -name "$name" | head -n 1)
+            test -n "$binary"
+            xcrun lipo "$binary" -verify_arch arm64 arm64e
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: AFProbe-${{ matrix.mode }}
+          path: companions/AFProbe/packages/*.deb
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: AFProbe-log-${{ matrix.mode }}
+          path: companions/AFProbe/build.log
+          if-no-files-found: ignore
